@@ -1040,4 +1040,100 @@ public class LunarBase {
         return sArr;
     }
 
+    /**
+     * 음력 날자를 양력 날자로 변환
+     *
+     * @access protected
+     *
+     *   <pre>
+     *   Array
+     *   (
+     *       [0] => 2013   // 양력 연도
+     *       [1] => 6      // 양력 월
+     *       [2] => 9      // 양력 일
+     *   )
+     *   </pre>
+     *
+     * @param int  년
+     * @param int  월
+     * @param int  일
+     * @param bool 음력 윤달 여부
+     * @return Integer array
+     */
+    protected int[] lunartosolar (int lyear, int lmonth, int lday, boolean moonyun) {
+    	int syear  = 0;
+    	int smonth = 0; 
+    	int sday   = 0;
+    	
+    	/* $inginame, $ingiyear, $ingimonth, $ingiday, $ingihour, $ingimin,				0~5
+        	$midname, $midyear, $midmonth, $midday, $midhour, $midmin,					6~11
+        	$outginame, $outgiyear, $outgimonth, $outgiday, $outgihour, $outgimin		12~17
+        */
+        int[] list1st = this.solortoso24 (lyear, 2, 15, 0, 0);
+
+        list1st[6] = lmonth * 2 - 1;
+        BigDecimal tmin = MathUtil.convertIntToBigDecimal(LunarConstants.month[list1st[6]]).multiply(NumberUtils.createBigDecimal("-1"));
+        
+        // $midyear, $midmonth, $midday, $midhour, $midmin
+        int[] list2nd = this.getdatebymin (tmin.intValue(), list1st[1], list1st[2], list1st[3], list1st[4], list1st[5]);
+
+        /* $outgiyear, $outgimonth, $outgiday, $hour, $min,								0~4
+        	$yearm, $monthm1, $daym, $hourm, $minm,										5~9
+        	$year1, $month1, $day1, $hour1, $min1										10~14
+        */
+        int[] list3rd = this.getlunarfirst (list2nd[1], list2nd[2], list2nd[3]);
+        
+        // $lyear2, $lmonth2, $lday2, $lnp, $lnp2
+        String[] list4th = this.solartolunar (list3rd[0], list3rd[1], list3rd[2]);
+
+        if ( Integer.valueOf(list4th[0]) == lyear && lmonth == Integer.valueOf(list4th[1]) ) {
+            // 평달, 윤달
+            tmin = (NumberUtils.createBigDecimal("-1440").multiply(MathUtil.convertIntToBigDecimal(lday))).add(NumberUtils.createBigDecimal("10"));
+            
+            // $syear, $smonth, $sday, $hour, $min
+            int[] list5th = this.getdatebymin (tmin.intValue(), list3rd[0], list3rd[1], list3rd[2], 0, 0);
+            
+            // assign "Return Value" - 01
+            syear  = list5th[0];
+        	smonth = list5th[1]; 
+        	sday   = list5th[2];
+        	
+            if ( moonyun ) {
+            	// $lyear2, $lmonth2, $lday2, $lnp, $lnp2
+                String[] list6th = this.solartolunar (list3rd[10], list3rd[11], list3rd[12]);
+                if ( Integer.valueOf(list6th[0]) == lyear && lmonth == Integer.valueOf(list6th[1]) ) {
+                    tmin = (NumberUtils.createBigDecimal("-1440").multiply(MathUtil.convertIntToBigDecimal(lday))).add(NumberUtils.createBigDecimal("10"));
+                    
+                    // $syear, $smonth, $sday, $hour, $min
+                    int[] list7th = this.getdatebymin (tmin.intValue(), list3rd[10], list3rd[11], list3rd[12], 0, 0);
+                    
+                    // assign "Return Value" - 02
+                    syear  = list7th[0];
+                	smonth = list7th[1]; 
+                	sday   = list7th[2];
+                }
+            }
+        } else {
+            // ㅈ우기가 두번든 달의 전후
+        	// $lyear2, $lmonth2, $lday2, $lnp, $lnp2
+            String[] list8th = this.solartolunar (list3rd[10], list3rd[11], list3rd[12]);
+            if ( Integer.valueOf(list8th[0]) == lyear && lmonth == Integer.valueOf(list8th[1]) ) {
+            	tmin = (NumberUtils.createBigDecimal("-1440").multiply(MathUtil.convertIntToBigDecimal(lday))).add(NumberUtils.createBigDecimal("10"));
+                
+            	// $syear, $smonth, $sday, $hour, $min
+                int[] list9th = this.getdatebymin (tmin.intValue(), list3rd[10], list3rd[11], list3rd[12], 0, 0);
+                
+                // assign "Return Value" - 03
+                syear  = list9th[0];
+            	smonth = list9th[1]; 
+            	sday   = list9th[2];
+            }
+        }
+
+        //
+        int[] iArr = {syear, smonth, sday};
+
+        return iArr;
+    }
+
 }
