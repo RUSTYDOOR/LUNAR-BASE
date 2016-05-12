@@ -147,8 +147,8 @@ public class LunarBase {
      * @param int
      * @return int
      */
-    protected BigDecimal div (int iVal1, int iVal2) {
-        return (MathUtil.convertIntToBigDecimal(iVal1).divide(MathUtil.convertIntToBigDecimal(iVal2)));
+    protected int div (BigDecimal bdVal1, BigDecimal bdVal2) {
+        return (bdVal1.divide(bdVal2)).intValue();
     }
     
     /**
@@ -309,8 +309,8 @@ public class LunarBase {
      * @return int 분
      */
     public int getminbytime (int uy, int umm, int ud, int uh, int umin, int y1, int mo1, int d1, int h1, int mm1) {
-        int iMin     = 0;
-        int iDispday = 0;
+    	int iMin     = 0;
+    	int iDispday = 0;
 
         iDispday = this.disp2days (uy, umm, ud, y1, mo1, d1);
         iMin     = iDispday * 24 * 60 + (uh - h1) * 60 + (umin - mm1);
@@ -339,12 +339,12 @@ public class LunarBase {
         int mi1 = 0;
         int t   = 0;
 
-        y1 = uyear - (this.div(tmin, 525949)).intValue();
-
+        y1 = uyear - this.div(MathUtil.convertIntToBigDecimal(tmin), NumberUtils.createBigDecimal("525949"));
+        
         if ( tmin > 0 ) {
-            y1 += 2 ;
+        	y1 += 2;
             do {
-                y1--;
+            	y1--;
                 t = this.getminbytime (uyear, umonth, uday, uhour, umin, y1, 1, 1, 0, 0);
             } while ( t < tmin );
 
@@ -360,7 +360,7 @@ public class LunarBase {
                 t = this.getminbytime (uyear, umonth, uday, uhour, umin, y1, mo1, d1, 0, 0);
             } while ( t < tmin );
 
-            h1 = 24 ;
+            h1 = 24;
             do {
                 h1--;
                 t = this.getminbytime (uyear, umonth, uday, uhour, umin, y1, mo1, d1, h1, 0);
@@ -452,7 +452,7 @@ public class LunarBase {
         );
 
         // 무인년(1996)입춘시점부터 해당일시까지 경과년수
-        so24 = (this.div (displ2min, 525949)).intValue();
+        so24 = this.div (MathUtil.convertIntToBigDecimal(displ2min), NumberUtils.createBigDecimal("525949"));
 
         if ( displ2min >= 0 )
             so24++;
@@ -654,7 +654,7 @@ public class LunarBase {
      */
     protected BigDecimal degreelow (BigDecimal d) {
         BigDecimal di = d;
-        BigDecimal i  = this.div(d.intValue(), 360);
+        BigDecimal i  = MathUtil.convertIntToBigDecimal( this.div(d, NumberUtils.createBigDecimal("360")) );
 
         // $di = $d - ($i * 360);
         di = d.subtract(i).multiply(NumberUtils.createBigDecimal("360"));
@@ -924,14 +924,17 @@ public class LunarBase {
      * @param int 일
      * @return String Array  (int 와 boolean 이 혼용)
      */
-    /*protected String[] solartolunar (int solyear, int solmon, int solday) {
-    	int largemonth = 0;
-    	int midname2   = 0;
+    protected String[] solartolunar (int solyear, int solmon, int solday) {
+    	int largemonth    = 0;
+    	int midname2      = 0;
+    	int lmoonyun      = 0;
+    	int lyear         = 0;
+    	BigDecimal lmonth = null;
 
-    	 $smoyear, $smomonth, $smoday, $smohour, $smomin,		0~4
+    	/*$smoyear, $smomonth, $smoday, $smohour, $smomin,		0~4
            $y0, $mo0, $d0, $h0, $mi0, 							5~9
-           $y1, $mo1, $d1, $h1, $mi1							10~14 
-           
+           $y1, $mo1, $d1, $h1, $mi1							10~14
+           */
         int[] list1st = this.getlunarfirst (solyear, solmon, solday);
 
         int lday = this.disp2days (solyear, solmon, solday, list1st[0], list1st[1], list1st[2]) + 1;
@@ -943,15 +946,15 @@ public class LunarBase {
         else if ( i == 29 )
             largemonth = 0;		// 소월
 
-         $inginame, $ingiyear, $ingimonth, $ingiday, $ingihour, $ingimin,				0~5
+        /*$inginame, $ingiyear, $ingimonth, $ingiday, $ingihour, $ingimin,				0~5
             $midname1, $midyear1, $midmonth1, $midday1, $midhour1, $midmin1,			6~11
             $outginame, $outgiyear, $outgimonth, $outgiday, $outgihour, $outgimin		12~17
-            
+            */
         int[] list2nd = this.solortoso24 (list1st[0], list1st[1], list1st[2], list1st[3], list1st[4]);
 
         midname2 = list2nd[6] + 2;
 
-        if ( midname2 > 24 ) 
+        if ( midname2 > 24 )
         	midname2 = 1;
 
         BigDecimal s0 = MathUtil.convertIntToBigDecimal( LunarConstants.month[midname2] - LunarConstants.month[list2nd[6]] );
@@ -961,70 +964,80 @@ public class LunarBase {
 
         s0 = s0.multiply(NumberUtils.createBigDecimal("-1"));
 
-        list ($midyear2, $midmonth2, $midday2, $midhour2, $midmin2) = this.getdatebymin (s0.intValue(), $midyear1, $midmonth1, $midday1, $midhour1, $midmin1);
+        // $midyear2, $midmonth2, $midday2, $midhour2, $midmin2
+        int[] list3rd = this.getdatebymin (s0.intValue(), list2nd[7], list2nd[8], list2nd[9], list2nd[10], list2nd[11]);
 
-        if ( ($midmonth1 == $smomonth && $midday1 >= $smoday) || ($midmonth1 == $mo1 && $midday1 < $d1) ) {
-            $lmonth  = ($midname1 - 1) / 2 + 1;
-            $lmoonyun = 0;
+        if ( (list2nd[8] == list1st[1] && list2nd[9] >= list1st[2]) || (list2nd[8] == list1st[11] && list2nd[9] < list1st[12]) ) {
+        	// ($midname1 - 1) / 2 + 1
+            lmonth   = (MathUtil.convertIntToBigDecimal(list2nd[6]).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2")).add(NumberUtils.createBigDecimal("1"));
+            lmoonyun = 0;
         } else {
-            if ( ($midmonth2 == $mo1 && $midday2<$d1) || ($midmonth2 == $smomonth && $midday2 >= $smoday) ) {
-                $lmonth   = ($midname2 - 1) / 2 + 1;
-                $lmoonyun = 0;
+            if ( (list3rd[1] == list1st[11] && list3rd[2] < list1st[12]) || (list3rd[1] == list1st[1] && list3rd[2] >= list1st[2]) ) {
+            	// ($midname2 - 1) / 2 + 1;
+            	lmonth   = (MathUtil.convertIntToBigDecimal(midname2).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2")).add(NumberUtils.createBigDecimal("1"));
+                lmoonyun = 0;
             } else {
-                if (  $smomonth < $midmonth2 && $midmonth2 < $mo1 ) {
-                    $lmonth   = ($midname2 - 1) /2 + 1;
-                    $lmoonyun = 0;
+                if ( list1st[1] < list3rd[1] && list3rd[1] < list1st[11] ) {
+                	// ($midname2 - 1) / 2 + 1;
+                    lmonth   = (MathUtil.convertIntToBigDecimal(midname2).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2")).add(NumberUtils.createBigDecimal("1"));
+                    lmoonyun = 0;
                 } else {
-                    $lmonth   = ($midname1 - 1) / 2 + 1;
-                    $lmoonyun =1;
+                	// ($midname1 - 1) / 2 + 1
+                    lmonth   = (MathUtil.convertIntToBigDecimal(list2nd[6]).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2")).add(NumberUtils.createBigDecimal("1"));
+                    lmoonyun = 1;
                 }
             }
         }
 
+        lyear = list1st[0];
+        if ( lmonth.intValue() == 12 && list1st[1] == 1 )
+            lyear--;
 
-        $lyear = $smoyear;
-        if ( $lmonth == 12 && $smomonth == 1 )
-            $lyear--;
+        if ( (lmonth.intValue() == 11 && lmoonyun == 1) || lmonth.intValue() == 12 || lmonth.intValue() < 6 ) {
+        	// $midyear1, $midmonth1, $midday1, $midhour1, $midmin1		(Notify : list2nd[7] ~ list2nd[11] 까지 중복임, 별도의 이름으로 재정의)
+            int[] list4th = this.getdatebymin (2880, list1st[0], list1st[1], list1st[2], list1st[3], list1st[4]);
 
-        if ( ($lmonth == 11 && $lmoonyun == 1) || $lmonth == 12 || $lmonth < 6 ) {
-            list ($midyear1, $midmonth1, $midday1, $midhour1, $midmin1)
-                = $this->getdatebymin (2880, $smoyear, $smomonth, $smoday, $smohour, $smomin);
+            // $outgiyear, $outgimonth, $outgiday, $lnp, $lnp2			(Notify : list2nd[13] ~ list2nd[15] 까지 중복임, 별도의 이름으로 재정의)
+            String[] list5th = this.solartolunar (list4th[0], list4th[1], list4th[2]);
+            
+            int outgimonth = Integer.valueOf( list5th[1] );
+            int outgiday   = Integer.valueOf( list5th[2] ); 
+            
+            outgiday = lmonth.subtract(NumberUtils.createBigDecimal("1")).intValue();
+            if ( outgiday == 0 )
+                outgiday = 12;
 
-            list ($outgiyear, $outgimonth, $outgiday, $lnp, $lnp2)
-                = $this->solartolunar ($midyear1, $midmonth1, $midday1);
-
-            $outgiday = $lmonth - 1;
-            if ( $outgiday== 0 )
-                $outgiday = 12;
-
-            if ( $outgiday == $outgimonth ) {
-                if ( $lmoonyun == 1 )
-                    $lmoonyun=0;
+            if ( outgiday == outgimonth ) {
+                if ( lmoonyun == 1 )
+                    lmoonyun = 0;
             } else {
-                if ( $lmoonyun == 1 ) {
-                    if ( $lmonth != $outgimonth ) {
-                        $lmonth--;
-                        if ( $lmonth == 0 ) { 
-                            $lyear--;
-                            $lmonth = 12;
+                if ( lmoonyun == 1 ) {
+                    if ( lmonth.intValue() != outgimonth ) {
+                    	lmonth = lmonth.subtract(NumberUtils.createBigDecimal("1"));
+                        if ( lmonth.intValue() == 0 ) { 
+                            lyear--;
+                            lmonth = NumberUtils.createBigDecimal("12");
                         };
-                        $lmoonyun = 0;
+                        lmoonyun = 0;
                     };
                 } else {
-                    if ( $lmonth == $outgimonth ) {
-                        $lmoonyun = 1;
-                    } else {  
-                        $lmonth--;
-                        if ( $lmonth == 0 ) {
-                            $lyear--;
-                            $lmonth = 12;
+                    if ( lmonth.intValue() == outgimonth ) {
+                        lmoonyun = 1;
+                    } else {
+                        lmonth = lmonth.subtract(NumberUtils.createBigDecimal("1"));
+                        if ( lmonth.intValue() == 0 ) {
+                            lyear--;
+                            lmonth = NumberUtils.createBigDecimal("12");
                         }
                     }
                 }
             }
-
         }
 
-        return array ($lyear, $lmonth, $lday, $lmoonyun ? true : false, $largemonth ? true : false);
-    }*/
+        // array ($lyear, $lmonth, $lday, $lmoonyun ? true : false, $largemonth ? true : false);
+        String[] sArr = {String.valueOf(lyear), lmonth.toString(), String.valueOf(lday), String.valueOf(lmoonyun), (lmoonyun == 1 ? "true" : "false"), (largemonth == 1 ? "true" : "false")};
+
+        return sArr;
+    }
+
 }
