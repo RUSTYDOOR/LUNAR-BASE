@@ -29,6 +29,7 @@ import lunar.consts.LunarConstants;
  *
  * </pre>
  *
+ * @category    Calendar
  * @package     Lunar
  * @author      izoka <http://izoka.pe.kr>
  * @copyright   (c) 2016 izoka.pe.kr
