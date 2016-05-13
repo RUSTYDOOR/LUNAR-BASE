@@ -1135,5 +1135,65 @@ public class LunarBase {
 
         return iArr;
     }
+    
+    /**
+     * 그레고리력 날자를 요일의 배열 번호로 변환
+     *
+     * @access protected
+     * @param int 년
+     * @param int 월
+     * @param int 일
+     * @return int
+     */
+    protected int getweekday (int syear, int smonth, int sday) {
+        int d = this.disp2days ( syear, smonth, sday, LunarConstants.unityear, LunarConstants.unitmonth, LunarConstants.unitday );
 
+        int i = this.div (MathUtil.convertIntToBigDecimal(d), NumberUtils.createBigDecimal("7") );
+        d -= i * 7;
+
+        while ( d > 6 || d < 0 ) {
+            if (d > 6)
+                d -= 7;
+            else
+                d += 7;
+        }
+
+        if ( d < 0 )
+            d += 7;
+
+        return d;
+    }
+    
+    /**
+     * 그레고리력의 날자에 대한 28수를 구함
+     *
+     * @access protected
+     * @param int 년
+     * @param int 월
+     * @param int 일
+     * @return int
+     */
+    protected int get28sday (int syear, int smonth, int sday) {
+        int d = this.disp2days ( syear, smonth, sday, LunarConstants.unityear, LunarConstants.unitmonth, LunarConstants.unitday );
+
+        int i = this.div (MathUtil.convertIntToBigDecimal(d), NumberUtils.createBigDecimal("28"));
+        d -= i * 28;
+
+        while ( d > 27 || d < 0 ) {
+            if (d > 27)
+                d -= 28;
+            else
+                d += 28;
+        }
+
+        if ( d < 0 )
+            d += 7;
+
+        d -= 11;
+
+        if ( d < 0 )
+            d += 28;
+
+        return d;
+    }
 }
