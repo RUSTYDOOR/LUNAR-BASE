@@ -152,6 +152,7 @@ public class LunarBase {
         return (bdVal1.divide(bdVal2)).intValue();
     }
     
+    
     /**
      * year의 1월 1일부터 해당 일자까지의 날자수
      *
@@ -184,6 +185,7 @@ public class LunarBase {
 
         return iTimeCount;
     }
+    
     
     /**
      * iYear1, iMonth1, iDay1일부터 iYear2, iMonth2, iDay2까지의 일수 계산
@@ -293,6 +295,7 @@ public class LunarBase {
         return dis;
     }
     
+    
     /**
      * uy, umm, ud, uh, umin 과 y1, mo1, d1, h1, mm1사이의 시간(분)
      * 
@@ -318,6 +321,7 @@ public class LunarBase {
 
         return iMin;
     }
+    
     
     /**
      * uyear, umonth, uday, uhour, umin으로부터 tmin(분)떨이진 시점의
@@ -407,6 +411,7 @@ public class LunarBase {
 
         return iArr; 
     }
+    
     
     /**
      * 그레고리력의 년월시일분으로 60년의 배수, 세차, 월건(태양력),
@@ -548,6 +553,7 @@ public class LunarBase {
         return iArr;
     }
     
+    
     /**
      * 절기 시간 구하기
      *
@@ -646,6 +652,7 @@ public class LunarBase {
         return iArr;
     }
 
+    
     /**
      * 미지의 각도를 0~360도 이내로 만듬
      *
@@ -672,6 +679,7 @@ public class LunarBase {
 
         return di;
     }
+    
     
     /**
      * 태양황력과 달황경의 차이 (1996 기준)
@@ -747,6 +755,7 @@ public class LunarBase {
 
         return re;
     }
+    
     
     /**
      * 그레고리력 년월일이 들어있는 
@@ -904,6 +913,7 @@ public class LunarBase {
         return iArr;
     }
     
+    
     /**
      * 양력 날자를 음력 날자로 변환
      *
@@ -1041,6 +1051,7 @@ public class LunarBase {
         return sArr;
     }
 
+    
     /**
      * 음력 날자를 양력 날자로 변환
      *
@@ -1137,6 +1148,7 @@ public class LunarBase {
         return iArr;
     }
     
+    
     /**
      * 그레고리력 날자를 요일의 배열 번호로 변환
      *
@@ -1164,6 +1176,7 @@ public class LunarBase {
 
         return d;
     }
+    
     
     /**
      * 그레고리력의 날자에 대한 28수를 구함
