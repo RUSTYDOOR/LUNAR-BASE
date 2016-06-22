@@ -6,7 +6,7 @@ package lunar;
  *
  * 이 패키지는 양력/음력간의 변환을 제공한다.
  *
- * 1852년 10월 15일 이전의 양력 날자는 율리우스력으로 취급을 하며,
+ * 1852년 10월 15일 이전의 양력 날짜는 율리우스력으로 취급을 하며,
  * 내부 계산시에 그레고리력으로 변환을 하여 계산을 한다.
  *
  * 제공 되는 기능은 다음과 같다.
@@ -53,11 +53,8 @@ import lunar.LunarBase;
 
 public class Lunar {
     /**
-     * 입력된 날자 형식을 연/월/일의 멤버를 가지는 배열로 반환한다.
+     * 입력된 날짜 형식을 연/월/일의 멤버를 가지는 배열로 반환한다.
      * 입력된 변수 값은 YYYY-MM-DD 형식으로 변환 된다.
-     *
-     * 예제:
-     * {@example pear_Lunar/tests/sample.php 30 25}
      *
      * @access public
      * @return array
@@ -69,17 +66,17 @@ public class Lunar {
      *           [2] => 16
      *       )
      *   </pre>
-     * @param string|int 날자형식
+     * @param string|int 날짜형식
      *
-     *   - unixstmap (1970년 12월 15일 이후부터 가능)
+     *   - unixstamp (1970년 12월 15일 이후부터 가능)
      *   - Ymd or Y-m-d
      *   - null data (현재 시간)
      */
 	public function toargs (&$v) {
         if ( $v == null ) {
-            $y = (int) date ('Y');
-            $m = (int) date ('m');
-            $d = (int) date ('d');
+            $y = (int) date ('Y');		// 연도의 완전한 숫자 표현, 4 숫자 		(예시: 1999나 2003)
+            $m = (int) date ('m');		// 0이 붙는 월 숫자 표현 				(예시: 01에서 12)
+            $d = (int) date ('d');		// 일, 앞에 0이 붙는 2 숫자 			(예시: 01에서 31)
         } else {
             if ( is_numeric ($v) && $v > 30000000 ) {
                 // unit stamp ?
@@ -88,7 +85,8 @@ public class Lunar {
                 $d = (int) date ('d', $v);
             } else {
                 if ( preg_match ('/^(-?[0-9]{1,4})[\/-]?([0-9]{1,2})[\/-]?([0-9]{1,2})$/', trim ($v), $match) ) {
-                    array_shift ($match);
+                	// $match[0] 에는 정규식에 매치된 전체값이 넘어오기에 Shift 하여 [0] 을 털어버린다.
+                	array_shift ($match);
                     list ($y, $m, $d) = $match;
                 } else {
                     throw new Exception ('Invalid Date Format', E_USER_WARNING);
@@ -97,7 +95,7 @@ public class Lunar {
             }
 
             if ( $y > 1969 && $y < 2038 ) {
-                $fixed = mktime (0, 0, 0, $m, $d, $y);
+                $fixed = mktime (0, 0, 0, $m, $d, $y);		// Java8 의 getEpochSecond 을 사용
                 $y = (int) date ('Y', $fixed);
                 $m = (int) date ('m', $fixed);
                 $d = (int) date ('d', $fixed);
@@ -108,6 +106,8 @@ public class Lunar {
                 }
             }
         }
+        
+        // toargs() 를 사용하는 모든 곳을 검색했으나, $v 가 참조변수로 재사용되는 곳은 찾을 수 없음.
         $v = sprintf ('%d-%d-%d', $y, $m, $d);
 
         return array ($y, $m, $d);
@@ -117,8 +117,6 @@ public class Lunar {
     /**
      * 연도를 human readable하게 표시
      *
-     * 예제:
-     * {@example pear_Lunar/tests/sample.php 56 11}
      *
      * @access public
      * @return string   AD/BC type의 연도
@@ -164,7 +162,7 @@ public class Lunar {
     
 
     /**
-     * YYYY-MM-DD 형식의 날자를 반환
+     * YYYY-MM-DD 형식의 날짜를 반환
      *
      * @access private
      * @return string   YYYY-MM-DD 형식으로 반환
@@ -203,7 +201,7 @@ public class Lunar {
 
 
     /**
-     * 해당 날자가 gregorian 범위인지 체크
+     * 해당 날짜가 gregorian 범위인지 체크
      *
      * @access public
      * @return bool
@@ -233,7 +231,7 @@ public class Lunar {
     
 
     /**
-     * Gregorian 날자를 Julian date로 변환 (by PURE PHP CODE)
+     * Gregorian 날짜를 Julian date로 변환 (by PURE PHP CODE)
      *
      * http://new.astronote.org/bbs/board.php?bo_table=prog&wr_id=29929
      * 1. Y는 해당년도, M는 월(1월=1,2월=2), D는 해당 월의 날짜이다.
@@ -274,7 +272,7 @@ public class Lunar {
     
 
     /**
-     * Gregorian 날자를 Julian date로 변환 (by Calendar Extension)
+     * Gregorian 날짜를 Julian date로 변환 (by Calendar Extension)
      *
      * @access private
      * @return int Julian date
@@ -297,7 +295,7 @@ public class Lunar {
     
 
     /**
-     * Gregorian 날자를 Julian date로 변환
+     * Gregorian 날짜를 Julian date로 변환
      *
      * @access public
      * @return int Julian date
@@ -357,15 +355,15 @@ public class Lunar {
     
 
     /**
-     * 양력 날자를 음력으로 변환
+     * 양력 날짜를 음력으로 변환
      *
-     * 진짜 만세력은 1582/10/15(Gregorian calendar의 시작) 이전의 날자
+     * 진짜 만세력은 1582/10/15(Gregorian calendar의 시작) 이전의 날짜
      * 역시 Gregorian으로 표기를 한다. 그러므로 Calendar의 오류로 보일
      * 수도 있다. (실제로는 계산상의 오류는 없다고 봐야 한다.)
      *
      * 이런 부분을 보정하기 위하여, tolunar method는 1582/10/04 까지의
-     * 날자는 julian calendar로 변환을 하여 음력날자를 구한다. 이로 인
-     * 하여 1582/10/15 이전의 음력 날자는 original 진짜 만세력과 다른
+     * 날짜는 julian calendar로 변환을 하여 음력날짜를 구한다. 이로 인
+     * 하여 1582/10/15 이전의 음력 날짜는 original 진짜 만세력과 다른
      * 값을 가지게 된다.)
      *
      * 이렇게 표현될 경우, 천문우주 지식정보의 값과 비슷하게 나올 수는
@@ -373,16 +371,14 @@ public class Lunar {
      * 발생할 수 있다.
      * http://astro.kasi.re.kr/Life/ConvertSolarLunarForm.aspx?MenuID=115
      *
-     * 예제:
-     * {@example pear_Lunar/tests/sample.php 83 35}
      *
      * @access public
-     * @return stdClass    음력 날자 정보 반환
+     * @return stdClass    음력 날짜 정보 반환
      *
      *   <pre>
      *   stdClass Object
      *   (
-     *       [date] => 2013-06-09         // YYYY-MM-DD 형식의 음력 날자
+     *       [date] => 2013-06-09         // YYYY-MM-DD 형식의 음력 날짜
      *       [dangi] => 4346              // 단기
      *       [hyear] => AD 2013           // AD/BC 형식의 연도
      *       [year] => 2013               // 연도
@@ -392,7 +388,7 @@ public class Lunar {
      *       [largemonth] => 1            // 평달/큰달 여부
      *       [week] => 화                 // 요일
      *       [hweek] => 火                // 한자 요일
-     *       [unixstamp] => 1373900400    // unixstamp (양력 날자)
+     *       [unixstamp] => 1373900400    // unixstamp (양력 날짜)
      *       [ganji] => 계사              // 세차(년)
      *       [hganji] => 癸巳             // 한자 세차
      *       [gan] => 계                  // 세차 10간
@@ -403,11 +399,11 @@ public class Lunar {
      *   )
      *   </pre>
      *
-     * @param int|string   날자형식
-     *   - unixstmap (1970년 12월 15일 이후부터 가능)
+     * @param int|string   날짜형식
+     *   - unixstamp (1970년 12월 15일 이후부터 가능)
      *   - Ymd or Y-m-d
      *   - null data (현재 시간)
-     *   - 1582년 10월 15일 이전의 날자는 율리우스력의 날자로 취급함.
+     *   - 1582년 10월 15일 이전의 날짜는 율리우스력의 날짜로 취급함.
      */
     public function tolunar ($v = null) {
         list ($y, $m, $d) = $this->toargs ($v);
@@ -447,27 +443,25 @@ public class Lunar {
     
 
     /**
-     * 음력 날자를 양력으로 변환.
+     * 음력 날짜를 양력으로 변환.
      *
      * 구하는 음력월이 윤달인지 여부를 알 수 없을 경우, tosolar method
-     * 를 실행하여 얻은 양력 날자를 다시 tolunar로 변환하여 비교하여
+     * 를 실행하여 얻은 양력 날짜를 다시 tolunar로 변환하여 비교하여
      * 동일하지 않다면, 윤달 파라미터 값을 주고 다시 구해야 한다!
      *
      * 진짜 만세력은 Gregorian으로 표기를 하기 때문에, 양력 1582-10-15
      * 이전의 경우에는 return object의 julian member 값으로 비교를 해야
      * 한다.
      *
-     * 예제:
-     * {@example pear_Lunar/tests/sample.php 119 42}
      *
      * @access public
-     * @return stdClass    양력 날자 정보 object 반환
+     * @return stdClass    양력 날짜 정보 object 반환
      *
      *   <pre>
      *   stdClass Object
      *   (
      *       [jd] => 2456527             // Julian Date Count
-     *       [date] => 2013-07-16        // YYYY-MM-DD 형식의 양력 날자
+     *       [date] => 2013-07-16        // YYYY-MM-DD 형식의 양력 날짜
      *       [julian] => 2013-08-09      // Julian Calendar
      *       [dangi] => 4346             // 단기 (양력)
      *       [hyear] => AD 2013          // AD/BC 형식 년도
@@ -487,7 +481,7 @@ public class Lunar {
      *   )
      *   </pre>
      *
-     * @param int|string 날자형식
+     * @param int|string 날짜형식
      *
      *   - unixstmap (1970년 12월 15일 이후부터 가능)
      *   - Ymd or Y-m-d
@@ -533,9 +527,6 @@ public class Lunar {
     /**
      * 세차(년)/월건(월)/일진(일) 데이터를 구한다.
      *
-     * 예제:
-     * {@example pear_Lunar/tests/sample.php 163 56}
-     *
      * @access public
      * @return stdClass
      *
@@ -558,13 +549,13 @@ public class Lunar {
      *   )
      *   </pre>
      *
-     * @param int|string 날자형식
+     * @param int|string 날짜형식
      *    <ul>
      *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
      *        <li>Ymd or Y-m-d</li>
      *        <li>null data (현재 시간)<li>
      *    </ul>
-     *    - 1582년 10월 15일 이전의 날자는 율리우스력의 날자로 취급함.
+     *    - 1582년 10월 15일 이전의 날짜는 율리우스력의 날짜로 취급함.
      */
     public function dayfortune ($v = null) {
         list ($y, $m, $d) = $this->toargs ($v);
@@ -587,9 +578,6 @@ public class Lunar {
     /**
      * 특정일의 28수를 구한다.
      *
-     * 예제:
-     * {@example pear_Lunar/tests/sample.php 221 35}
-     *
      * @access public
      * @return stdClass
      *
@@ -602,12 +590,12 @@ public class Lunar {
      *   )
      *   </pre>
      *
-     * @param int|string   날자형식
+     * @param int|string   날짜형식
      *
      *    - unixstmap (1970년 12월 15일 이후부터 가능)
      *    - Ymd or Y-m-d
      *    - null data (현재 시간)
-     *    - 1582년 10월 15일 이전의 날자는 율리우스력의 날자로 취급함.
+     *    - 1582년 10월 15일 이전의 날짜는 율리우스력의 날짜로 취급함.
      *    - Recursion s28day return value:<br>
      *      loop에서 s28day method를 반복해서 호출할 경우 return value를 이용할
      *      경우, return value의 index값을 이용하여 계산을 하지 않아 속도가 빠름.
@@ -636,9 +624,6 @@ public class Lunar {
 
     /**
      * 해당 양력일에 대한 음력 월의 절기 시간 구하기
-     *
-     * 예제:
-     * {@example pear_Lunar/tests/sample.php 257 52}
      *
      * @access public
      * @return stdClass   현달 초입/중기와 다음달 초입 데이터 반환
@@ -687,12 +672,12 @@ public class Lunar {
      *   )
      *   </pre>
      *
-     * @param int|string   날자형식
+     * @param int|string   날짜형식
      *
      *  - unixstmap (1970년 12월 15일 이후부터 가능)
      *  - Ymd or Y-m-d
      *  - null data (현재 시간
-     *  - 1582년 10월 15일 이전의 날자는 율리우스력의 날자로 취급함.
+     *  - 1582년 10월 15일 이전의 날짜는 율리우스력의 날짜로 취급함.
      */
     public function seasondate ($v = null) {
         list ($y, $m, $d) = $this->toargs ($v);
@@ -741,9 +726,6 @@ public class Lunar {
     /**
      * 양력일에 대한 음력월 합삭/망 데이터 구하기
      *
-     * 예제:
-     * {@example pear_Lunar/tests/sample.php 311 56}
-     *
      * @access public
      * @return stdClass 합삭/망 object
      *
@@ -774,12 +756,12 @@ public class Lunar {
      *   )
      *   </pre>
      *
-     * @param int|string   날자형식
+     * @param int|string   날짜형식
      *
      *   - unixstmap (1970년 12월 15일 이후부터 가능)
      *   - Ymd or Y-m-d
      *   - null data (현재 시간)
-     *   - 1582년 10월 15일 이전의 날자는 율리우스력의 날자로 취급함.
+     *   - 1582년 10월 15일 이전의 날짜는 율리우스력의 날짜로 취급함.
      */
     public function moonstatus ($v = null) {
         list ($y, $m, $d) = $this->toargs ($v);
@@ -812,11 +794,8 @@ public class Lunar {
     
 
     /**
-     * dayfortune method의 ganji index 반환값을 이용하여, ganji
-     * 값을 구함
-     *
-     * 예제:
-     * {@example pear_Lunar/tests/sample.php 163 56}
+     * dayfortune method의 ganji index 반환값을 이용하여, 
+     * ganji 값을 구함
      *
      * @access public
      * @return string

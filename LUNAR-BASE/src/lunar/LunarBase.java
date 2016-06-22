@@ -154,13 +154,13 @@ public class LunarBase {
     
     
     /**
-     * year의 1월 1일부터 해당 일자까지의 날자수
+     * year의 1월 1일부터 해당 일자까지의 날짜수
      *
      * @access public
      * @param  int 년
      * @param  int 월
      * @param  int 일
-     * @return int 날자수
+     * @return int 날짜수
      */
     protected int disptimeday (int iYear, int iMonth, int iDay) {
         int iTimeCount = 0;
@@ -197,7 +197,7 @@ public class LunarBase {
      * @param int until year
      * @param int until month
      * @param int until day
-     * @return int 날자수
+     * @return int 날짜수
      */
     protected int disp2days (int iYear1, int iMonth1, int iDay1, int iYear2, int iMonth2, int iDay2) {
         int p1   = 0;
@@ -915,7 +915,7 @@ public class LunarBase {
     
     
     /**
-     * 양력 날자를 음력 날자로 변환
+     * 양력 날짜를 음력 날짜로 변환
      *
      * @access protected
      *
@@ -1053,7 +1053,7 @@ public class LunarBase {
 
     
     /**
-     * 음력 날자를 양력 날자로 변환
+     * 음력 날짜를 양력 날짜로 변환
      *
      * @access protected
      *
@@ -1150,7 +1150,7 @@ public class LunarBase {
     
     
     /**
-     * 그레고리력 날자를 요일의 배열 번호로 변환
+     * 그레고리력 날짜를 요일의 배열 번호로 변환
      *
      * @access protected
      * @param int 년
@@ -1179,7 +1179,7 @@ public class LunarBase {
     
     
     /**
-     * 그레고리력의 날자에 대한 28수를 구함
+     * 그레고리력의 날짜에 대한 28수를 구함
      *
      * @access protected
      * @param int 년
