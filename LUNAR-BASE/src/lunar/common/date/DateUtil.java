@@ -81,6 +81,23 @@ public class DateUtil {
 
 		return sRet;
 	}
+	
+	// ***************************************************************************************
+	// get Current date string
+	// ***************************************************************************************
+	public static String getCurrentDateString(Date date, String sFormat) {
+		java.util.Date d = new java.util.Date();
+		String sRet = "";
+
+		try {
+			SimpleDateFormat sd = new SimpleDateFormat(sFormat, Locale.KOREA);
+			sRet = sd.format(d);
+		} catch (Exception e) {
+			// e.printStackTrace();
+		}
+
+		return sRet;
+	}
 
 	// ***************************************************************************************
 	// get Current year
@@ -412,14 +429,8 @@ public class DateUtil {
 	 */
 	public static String convertTimestampToDate(long lTime, String dateFormat) throws Exception {
 		Date d = new Date(lTime);
-		String sRet = "";
 
-		try {
-			SimpleDateFormat sd = new SimpleDateFormat(dateFormat, Locale.KOREA);
-			sRet = sd.format(d);
-		} catch (Exception e) {
-			// e.printStackTrace();
-		}
+		String sRet = getCurrentDateString(d, dateFormat);
 
 		return sRet;
 	}
