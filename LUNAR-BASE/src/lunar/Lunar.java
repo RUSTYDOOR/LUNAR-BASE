@@ -54,6 +54,7 @@ import java.util.HashMap;
 import lunar.LunarBase;
 import lunar.common.date.DateUtil;
 import lunar.common.text.TextUtil;
+import lunar.consts.LunarConstants;
 
 public class Lunar extends LunarBase {
     /**
@@ -152,6 +153,23 @@ public class Lunar extends LunarBase {
         // '%d-%s%d-%s%d'
         return (year + "-" + ((month < 10 ) ? "0" : "") + month + "-" + ((day < 10 ) ? "0" : "") + day);
     }
+    
+    
+    /**
+     * YYYY-MM-DD 형식의 날자를 반환
+     *
+     * @access private
+     * @return string
+     * @param array
+     */
+    private String regdate (String[] v) {
+        int year  = Integer.valueOf( v[0] );
+        int month = Integer.valueOf( v[1] );
+        int day   = Integer.valueOf( v[2] );
+
+        // '%d-%s%d-%s%d'
+        return (year + "-" + ((month < 10 ) ? "0" : "") + month + "-" + ((day < 10 ) ? "0" : "") + day);
+    }
 
     
     /**
@@ -210,7 +228,7 @@ public class Lunar extends LunarBase {
      * @return object    
      */
     public HashMap<?, ?> tolunar (String v) {
-    	HashMap<?, ?> hmArray = new HashMap<?, ?>;
+    	HashMap<String, Object> hmArray = new HashMap<String, Object>();
 
     	int y;
     	int m;
@@ -228,12 +246,12 @@ public class Lunar extends LunarBase {
         m = iArr[1];
         d = iArr[2];
 
-        int[] r = this.solartolunar (y, m, d);
-        year   = r[0];
-        month  = r[1];
-        day    = r[2];
-        myoon  = r[3];
-        lmonth = r[4];
+        String[] r = this.solartolunar (y, m, d);
+        year       = Integer.valueOf( r[0] );
+        month      = Integer.valueOf( r[1] );
+        day        = Integer.valueOf( r[2] );
+        myoon      = Integer.valueOf( r[3] );
+        lmonth     = Integer.valueOf( r[4] );
 
         int w = this.getweekday (y, m, d);
 
@@ -253,35 +271,16 @@ public class Lunar extends LunarBase {
         hmArray.put( "largemonth", lmonth				 );
         hmArray.put( "week", 	   this.week[w]			 );
         hmArray.put( "hweek", 	   this.hweek[w]		 );
-        hmArray.put( "unixstamp",  value);
-        hmArray.put( "ganji", 	   value);
-        hmArray.put( "hganji", 	   value);
-        hmArray.put( "gan", 	   value);
-        hmArray.put( "hgan", 	   value);
-        hmArray.put( "ji", 		   value);
-        hmArray.put( "hji",		   value);
-        hmArray.put( "ddi", 	   value);
+        hmArray.put( "unixstamp",  DateUtil.mktime(this.regdate(new int[] {y, m, d}), "yyyy-MM-dd"));
+        hmArray.put( "ganji", 	   LunarConstants.gan[k1] + LunarConstants.ji[k2]);
+        hmArray.put( "hganji", 	   LunarConstants.hgan[k1] + LunarConstants.hji[k2]);
+        hmArray.put( "gan", 	   LunarConstants.gan[k1]);
+        hmArray.put( "hgan", 	   LunarConstants.hgan[k1]);
+        hmArray.put( "ji", 		   LunarConstants.ji[k2]);
+        hmArray.put( "hji",		   LunarConstants.hji[k2]);
+        hmArray.put( "ddi", 	   LunarConstants.ddi[k2]);
 
-        return (object) array (
-            'date'       => $this->regdate ($r),
-            'dangi'      => $year + 2333,
-            'hyear'      => $this->human_year ($year),
-            'year'       => $year,
-            'month'      => $month,
-            'day'        => $day,
-            'moonyoon'   => $myoon,
-            'largemonth' => $lmonth,
-            'week'       => $this->week[$w],
-            'hweek'      => $this->hweek[$w],
-            'unixstamp'  => mktime (0, 0, 0, $m, $d, $y),
-            'ganji'      => $this->gan[$k1] . $this->ji[$k2],
-            'hganji'     => $this->hgan[$k1] . $this->hji[$k2],
-            'gan'        => $this->gan[$k1],
-            'hgan'       => $this->hgan[$k1],
-            'ji'         => $this->ji[$k2],
-            'hji'        => $this->hji[$k2],
-            'ddi'        => $this->ddi[$k2]
-        );
+        return hmArray;
     }
 
     
@@ -289,7 +288,6 @@ public class Lunar extends LunarBase {
      * 음력 날자를 양력으로 변환
      *
      * @access public
-     * @return object
      *    <ul>
      *        <li>date => YYYY-MM-DD 형식의 양력 날자</li>
      *        <li>dangi => 단기</li>
@@ -315,39 +313,56 @@ public class Lunar extends LunarBase {
      *        <li>null data (현재 시간<li>
      *    </ul>
      * @param bool 윤달여부
+     * @return object 
      */
-    public function tosolar ($v = null, $yoon = false) {
-        list ($y, $m, $d) = $this->toargs ($v);
+    public HashMap<?, ?> tosolar (String v, boolean yoon) {
+    	HashMap<String, Object> hmArray = new HashMap<String, Object>();
 
-        $r = $this->lunartosolar ($y, $m, $d, $yoon);
-        list ($year, $month, $day) = $r;
+    	int y;
+    	int m;
+    	int d;
+    	int year;
+        int month;
+        int day;
+        int k1;
+        int k2;
 
-        $w = $this->getweekday ($year, $month, $day);
+    	int[] iArr = this.toargs (v);
+        y = iArr[0];
+        m = iArr[1];
+        d = iArr[2];
 
-        $k1 = ($y + 6) % 10;
-        $k2 = ($y + 8) % 12;
+        int[] r = this.lunartosolar (y, m, d, yoon);
+        year  = Integer.valueOf( r[0] );
+        month = Integer.valueOf( r[1] );
+        day   = Integer.valueOf( r[2] );
+        
+        int w = this.getweekday (year, month, day);
 
-        if ( $k1 < 0 ) $k1 += 10;
-        if ( $k2 < 0 ) $k2 += 12;
+        k1 = (y + 6) % 10;
+        k2 = (y + 8) % 12;
 
-        return (object) array (
-            'date'       => $this->regdate ($r),
-            'dangi'      => $year + 2333,
-            'hyear'      => $this->human_year ($year),
-            'year'       => $year,
-            'month'      => $month,
-            'day'        => $day,
-            'week'       => $this->week[$w],
-            'hweek'      => $this->hweek[$w],
-            'unixstamp'  => mktime (0, 0, 0, $month, $day, $year),
-            'ganji'      => $this->gan[$k1] . $this->ji[$k2],
-            'hganji'     => $this->hgan[$k1] . $this->hji[$k2],
-            'gan'        => $this->gan[$k1],
-            'hgan'       => $this->hgan[$k1],
-            'ji'         => $this->ji[$k2],
-            'hji'        => $this->hji[$k2],
-            'ddi'        => $this->ddi[$k2]
-        );
+        if ( k1 < 0 ) k1 += 10;
+        if ( k2 < 0 ) k2 += 12;
+        
+        hmArray.put( "date", 	   this.regdate(r) 		 );
+        hmArray.put( "dangi", 	   year + 2333     		 );
+        hmArray.put( "hyear", 	   this.human_year(year) );
+        hmArray.put( "year", 	   year					 );
+        hmArray.put( "month", 	   month				 );
+        hmArray.put( "day", 	   day					 );
+        hmArray.put( "week", 	   this.week[w]			 );
+        hmArray.put( "hweek", 	   this.hweek[w]		 );
+        hmArray.put( "unixstamp",  DateUtil.mktime(this.regdate(new int[] {y, m, d}), "yyyy-MM-dd") );
+        hmArray.put( "ganji", 	   LunarConstants.gan[k1] + LunarConstants.ji[k2]   );
+        hmArray.put( "hganji", 	   LunarConstants.hgan[k1] + LunarConstants.hji[k2] );
+        hmArray.put( "gan", 	   LunarConstants.gan[k1]  );
+        hmArray.put( "hgan", 	   LunarConstants.hgan[k1] );
+        hmArray.put( "ji", 		   LunarConstants.ji[k2]   );
+        hmArray.put( "hji",		   LunarConstants.hji[k2]  );
+        hmArray.put( "ddi", 	   LunarConstants.ddi[k2]  );
+        
+        return hmArray;
     }
 
     
@@ -355,19 +370,46 @@ public class Lunar extends LunarBase {
      * 일진 데이터를 구한다.
      *
      * @access public
-     * @return object
      * @param int|string 날자형식
      *    <ul>
      *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
      *        <li>Ymd or Y-m-d</li>
      *        <li>null data (현재 시간<li>
      *    </ul>
+     * @return object    
      */
-    public function dayfortune ($v = null) {
-        list ($y, $m, $d) = $this->toargs ($v);
+    public HashMap<?, ?> dayfortune (String v) {
+    	HashMap<String, Object> hmArray = new HashMap<String, Object>();
 
-        list ($so24, $year, $month, $day, $hour)
-            = $this->sydtoso24yd ($y, $m, $d, 1, 0);
+    	int y;
+    	int m;
+    	int d;
+    	int so24; 
+    	int year; 
+    	int month; 
+    	int day; 
+    	int hour;
+
+    	int[] iArr = this.toargs (v);
+        y = iArr[0];
+        m = iArr[1];
+        d = iArr[2];
+
+        // so24, so24year, so24month, so24day, so24hour
+        int[] so = this.sydtoso24yd (y, m, d, 1, 0);
+        so24  = so[0]; 
+        year  = so[1];
+        month = so[2];
+        day   = so[3];
+        hour  = so[4];
+
+        hmArray.put( "date",   v 				  );
+        hmArray.put( "year",   this.ganji(year)   );
+        hmArray.put( "month",  this.ganji(month)  );
+        hmArray.put( "day",    this.ganji(day)    );
+        hmArray.put( "hyear",  this.hganji(year)  );
+        hmArray.put( "hmonth", this.hganji(month) );
+        hmArray.put( "hday",   this.hganji(day)   );
 
         return (object) array (
             'data' => (object) array ('y' => $year, 'm' => $month, 'd' => $day),
@@ -378,6 +420,8 @@ public class Lunar extends LunarBase {
             'hmonth' => $this->hganji[$month],
             'hday' => $this->hganji[$day],
         );
+        
+        return hmArray;
     }
 
     
