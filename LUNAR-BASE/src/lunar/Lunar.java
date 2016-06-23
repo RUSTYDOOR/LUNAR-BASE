@@ -403,24 +403,14 @@ public class Lunar extends LunarBase {
         day   = so[3];
         hour  = so[4];
 
-        hmArray.put( "date",   v 				  );
-        hmArray.put( "year",   this.ganji(year)   );
-        hmArray.put( "month",  this.ganji(month)  );
-        hmArray.put( "day",    this.ganji(day)    );
-        hmArray.put( "hyear",  this.hganji(year)  );
-        hmArray.put( "hmonth", this.hganji(month) );
-        hmArray.put( "hday",   this.hganji(day)   );
+        hmArray.put( "date",   v 				  );  // 'data' => (object) array ('y' => $year, 'm' => $month, 'd' => $day)
+        hmArray.put( "year",   this.ganji[year]   );
+        hmArray.put( "month",  this.ganji[month]  );
+        hmArray.put( "day",    this.ganji[day]    );
+        hmArray.put( "hyear",  this.hganji[year]  );
+        hmArray.put( "hmonth", this.hganji[month] );
+        hmArray.put( "hday",   this.hganji[day]   );
 
-        return (object) array (
-            'data' => (object) array ('y' => $year, 'm' => $month, 'd' => $day),
-            'year' => $this->ganji[$year],
-            'month' => $this->ganji[$month],
-            'day' => $this->ganji[$day],
-            'hyear' => $this->hganji[$year],
-            'hmonth' => $this->hganji[$month],
-            'hday' => $this->hganji[$day],
-        );
-        
         return hmArray;
     }
 
@@ -437,25 +427,28 @@ public class Lunar extends LunarBase {
      *        <li>null data (현재 시간<li>
      *    </ul>
      */
-    public function s28day ($v = null) {
-        if ( is_object ($v) ) {
-            $r = $v->data + 1;
-            if ( $r >= 28 )
-                $r %= 28;
-
-            goto return_data;
-        }
-
-        list ($y, $m, $d) = $this->toargs ($v);
-        $r = $this->get28sday ($y, $m, $d);
-
-        return_data:
-
-        return (object) array (
-            'data' => $r,
-            'k' => $this->s28days_hangul[$r],
-            'h' => $this->s28days[$r]
-        );
+    public HashMap<?, ?> s28day (String v) {
+    	HashMap<String, Object> hmArray = new HashMap<String, Object>();
+    	
+    	// 기존에 존재하는 v->data 부분은 사용하지 않고 애매한 부분이 있어서 구현하지 않고 SKIP
+    	// 자세한 부분은 Lunar.php 를 참
+    	
+    	int y;
+    	int m;
+    	int d;
+    	
+    	int[] iArr = this.toargs (v);
+        y = iArr[0];
+        m = iArr[1];
+        d = iArr[2];
+    	
+        int r = this.get28sday (y, m, d);
+        
+        hmArray.put( "date", r );
+        hmArray.put( "k",    this.s28days_hangul[r] );
+        hmArray.put( "h",    this.s28days[r] );
+        
+        return hmArray;
     }
 
     
