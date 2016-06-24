@@ -79,7 +79,7 @@ public class Lunar extends LunarBase {
      *   
      * @return array
      */
-	public int[] toargs (String v) {
+	public int[] toargs (String v) throws Exception {
 		int y = 0;
 		int m = 0;
 		int d = 0;
@@ -114,6 +114,8 @@ public class Lunar extends LunarBase {
 
         //
         int[] iArr = {y, m, d};
+        
+        return iArr;
     }
 
 
@@ -199,7 +201,7 @@ public class Lunar extends LunarBase {
      *
      * @access public
      *    <ul>
-     *        <li>date => YYYY-MM-DD 형식의 음력 날자</li>
+     *        <li>date => YYYY-MM-DD 형식의 음력 날짜</li>
      *        <li>dangi => 단기</li>
      *        <li>hyear => AD/BC 형식 년도</li>
      *        <li>year => 년도</li>
@@ -227,7 +229,7 @@ public class Lunar extends LunarBase {
      *    
      * @return object    
      */
-    public HashMap<?, ?> tolunar (String v) {
+    public HashMap<?, ?> tolunar (String v) throws Exception {
     	HashMap<String, Object> hmArray = new HashMap<String, Object>();
 
     	int y;
@@ -289,7 +291,7 @@ public class Lunar extends LunarBase {
      *
      * @access public
      *    <ul>
-     *        <li>date => YYYY-MM-DD 형식의 양력 날자</li>
+     *        <li>date => YYYY-MM-DD 형식의 양력 날짜</li>
      *        <li>dangi => 단기</li>
      *        <li>hyear => AD/BC 형식 년도</li>
      *        <li>year => 년도</li>
@@ -315,7 +317,7 @@ public class Lunar extends LunarBase {
      * @param bool 윤달여부
      * @return object 
      */
-    public HashMap<?, ?> tosolar (String v, boolean yoon) {
+    public HashMap<?, ?> tosolar (String v, boolean yoon) throws Exception {
     	HashMap<String, Object> hmArray = new HashMap<String, Object>();
 
     	int y;
@@ -378,7 +380,7 @@ public class Lunar extends LunarBase {
      *    </ul>
      * @return object    
      */
-    public HashMap<?, ?> dayfortune (String v) {
+    public HashMap<?, ?> dayfortune (String v) throws Exception {
     	HashMap<String, Object> hmArray = new HashMap<String, Object>();
 
     	int y;
@@ -427,7 +429,7 @@ public class Lunar extends LunarBase {
      *        <li>null data (현재 시간<li>
      *    </ul>
      */
-    public HashMap<?, ?> s28day (String v) {
+    public HashMap<?, ?> s28day (String v) throws Exception {
     	HashMap<String, Object> hmArray = new HashMap<String, Object>();
     	
     	// 기존에 존재하는 v->data 부분은 사용하지 않고 애매한 부분이 있어서 구현하지 않고 SKIP
@@ -456,55 +458,73 @@ public class Lunar extends LunarBase {
      * 절기 시간 구하기
      *
      * @access public
-     * @return array
      * @param int|string 날자형식
      *    <ul>
      *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
      *        <li>Ymd or Y-m-d</li>
      *        <li>null data (현재 시간<li>
      *    </ul>
+     * @return array
      */
-    public function seasondate ($v = null) {
-        list ($y, $m, $d) = $this->toargs ($v);
+    public HashMap<?, ?> seasondate (String v) throws Exception {
+    	HashMap<String, HashMap<String, Object>> hmArray = new HashMap<String, HashMap<String, Object>>();
 
-        list (
-            $inginame, $ingiyear, $ingimonth, $ingiday, $ingihour, $ingimin,
-            $midname, $midyear, $midmonth, $midday, $midhour, $midmin,
-            $outginame, $outgiyear, $outgimonth, $outgiday, $outgihour, $outgimin
-        ) = $this->solortoso24 ($y, $m, 20, 1, 0);
+    	HashMap<String, Object> center  = new HashMap<String, Object>();
+    	HashMap<String, Object> ccenter = new HashMap<String, Object>();
+    	HashMap<String, Object> ncenter = new HashMap<String, Object>();
 
-        return (object) array (
-            'center'  => (object) array (
-                'name'  => $this->month_st[$inginame],
-                'hname' => $this->hmonth_st[$inginame],
-                'hyear' => $this->human_year ($ingiyear),
-                'year'  => $ingiyear,
-                'month' => $ingimonth,
-                'day'   => $ingiday,
-                'hour'  => $ingihour,
-                'min'   => $ingimin
-            ),
-            'ccenter' => (object) array (
-                'name'  => $this->month_st[$midname],
-                'hname' => $this->hmonth_st[$midname],
-                'hyear' => $this->human_year ($midyear),
-                'year'  => $midyear,
-                'month' => $midmonth,
-                'day'   => $midday,
-                'hour'  => $midhour,
-                'min'   => $midmin
-            ),
-            'nenter'  => (object) array (
-                'name'  => $this->month_st[$outginame],
-                'hname' => $this->hmonth_st[$outginame],
-                'hyear' => $this->human_year ($outgiyear),
-                'year'  => $outgiyear,
-                'month' => $outgimonth,
-                'day'   => $outgiday,
-                'hour'  => $outgihour,
-                'min'   => $outgimin
-            )
-        );
+    	int y;
+    	int m;
+    	int d;
+    	
+    	int[] iArr = this.toargs (v);
+        y = iArr[0];
+        m = iArr[1];
+        d = iArr[2];
+
+        /*
+          $inginame, $ingiyear, $ingimonth, $ingiday, $ingihour, $ingimin,			0~5
+          $midname1, $midyear1, $midmonth1, $midday1, $midhour1, $midmin1,			6~11
+          $outginame, $outgiyear, $outgimonth, $outgiday, $outgihour, $outgimin		12~17
+        */
+        int[] list1st = this.solortoso24 (y, m, 20, 1, 0);
+
+        //
+        center.put("name",  this.month_st[list1st[0]]);
+        center.put("hname", this.hmonth_st[list1st[0]]);
+        center.put("hyear", this.human_year(list1st[1]));
+        center.put("year",  list1st[1]);		// ingiyear
+        center.put("month", list1st[2]);		// ingimonth
+        center.put("day",   list1st[3]);		// ingiday
+        center.put("hour",  list1st[4]);		// ingihour
+        center.put("min",   list1st[5]);		// ingimin
+
+        // 
+        ccenter.put("name",  this.month_st[list1st[0]]);
+        ccenter.put("hname", this.hmonth_st[list1st[0]]);
+        ccenter.put("hyear", this.human_year(list1st[1]));
+        ccenter.put("year",  list1st[7]);		// midyear1
+        ccenter.put("month", list1st[8]);		// midmonth1
+        ccenter.put("day",   list1st[9]);		// midday1
+        ccenter.put("hour",  list1st[10]);		// midhour1
+        ccenter.put("min",   list1st[11]);		// midmin1
+
+        //
+        ncenter.put("name",  this.month_st[list1st[0]]);
+        ncenter.put("hname", this.hmonth_st[list1st[0]]);
+        ncenter.put("hyear", this.human_year(list1st[1]));
+        ncenter.put("year",  list1st[13]);		// outgiyear
+        ncenter.put("month", list1st[14]);		// outgimonth
+        ncenter.put("day",   list1st[15]);		// outgiday
+        ncenter.put("hour",  list1st[16]);		// outgihour
+        ncenter.put("min",   list1st[17]);		// outgimin
+        
+        //
+        hmArray.put("center",  center);
+        hmArray.put("ccenter", ccenter);
+        hmArray.put("ncenter", ncenter);
+        
+        return hmArray;
     }
 
     
@@ -520,33 +540,48 @@ public class Lunar extends LunarBase {
      *        <li>null data (현재 시간<li>
      *    </ul>
      */
-    public function moonstatus ($v = null) {
-        list ($y, $m, $d) = $this->toargs ($v);
+    public HashMap<?, ?> moonstatus (String v) throws Exception {
+    	HashMap<String, HashMap<String, Object>> hmArray = new HashMap<String, HashMap<String, Object>>();
 
-        list (
-            $y1, $mo1, $d1, $h1, $mi1,
-            $ym, $mom, $dm, $hm, $mim,
-            $y2, $m2, $d2, $h2, $mi2
-        ) = $this->getlunarfirst ($y, $m, $d);
+    	HashMap<String, Object> neo  = new HashMap<String, Object>();
+    	HashMap<String, Object> full = new HashMap<String, Object>();
 
-        return (object) array (
-            'new' => (object) array (
-                'hyear' => $this->human_year ($y1),
-                'year' => $y1,
-                'month' => $mo1,
-                'day' => $d1,
-                'hour' => $h1,
-                'min' => $mi1
-            ),   // 합삭 (New Moon)
-            'full' => (object) array (
-                'hyear' => $this->human_year ($ym),
-                'year' => $ym,
-                'month' => $mom,
-                'day' => $dm,
-                'hour' => $hm,
-                'min' => $mim
-            )    // 망 (Full Moon)
-        );
+    	int y;
+    	int m;
+    	int d;
+
+    	int[] iArr = this.toargs (v);
+        y = iArr[0];
+        m = iArr[1];
+        d = iArr[2];
+        
+        /*
+	        $y1, $mo1, $d1, $h1, $mi1,			0~4
+	        $ym, $mom, $dm, $hm, $mim,			5~9
+	        $y2, $m2, $d2, $h2, $mi2			10~14
+		*/
+        int[] list1st = this.getlunarfirst (y, m, d);
+        
+        //
+        neo.put("hyear", this.human_year(list1st[0]));
+        neo.put("year",  list1st[0]);
+        neo.put("month", list1st[1]);
+        neo.put("day",   list1st[2]);
+        neo.put("hour",  list1st[3]);
+        neo.put("min",   list1st[4]);
+        
+        //
+        full.put("hyear", this.human_year(list1st[5]));
+        full.put("year",  list1st[5]);
+        full.put("month", list1st[6]);
+        full.put("day",   list1st[7]);
+        full.put("hour",  list1st[8]);
+        full.put("min",   list1st[9]);
+        
+        hmArray.put("neo",  neo);
+        hmArray.put("full", full);
+        
+        return hmArray;
     }
 
     
@@ -556,11 +591,16 @@ public class Lunar extends LunarBase {
      * @param int ganji index number
      * @param bool 출력 모드 (false => 한글, true => 한자)
      */
-    public function ganji_ref ($no, $mode = false) {
-        if ( $no > 59 )
-            $no -= 60;
+    public String ganji_ref (String no, boolean mode) {
+    	int iNo = Integer.valueOf(no);
+    	
+        if ( iNo > 59 )
+        	iNo -= 60;
 
-        $m = $mode ? 'hganji' : 'ganji';
-        return $this->{$m}[$no];
+        if (mode) {
+        	return this.hganji[iNo];
+        } else {
+        	 return this.ganji[iNo];
+        }
     }
 }
