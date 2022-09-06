@@ -133,7 +133,7 @@ public class LunarMain {
              *            [ddi] => 뱀
              *        )
              */
-            boolean bYoon = ( TextUtil.convertInteger(hmToLunar.get("largemonth")) == 0 ) ? true : false;
+            boolean bYoon = Boolean.valueOf( TextUtil.convertString(hmToLunar.get("largemonth")) );
             System.out.println( lunar.tosolar ("2013-06-09", bYoon));
 
 
@@ -349,7 +349,7 @@ public class LunarMain {
 
             HashMap<?, ?> hmTolunar = lunar.tolunar ("2013-07-01");
 
-            if ( TextUtil.convertInteger(hmTolunar.get("largemonth")) == 0 ) // 평달의 경우 마지막이 29일이고 큰달은 30일이다.
+            if ( Boolean.valueOf(TextUtil.convertString(hmToLunar.get("largemonth"))) ) // 평달의 경우 마지막이 29일이고 큰달은 30일이다.
                 iPlus = 29 - TextUtil.convertInteger( hmTolunar.get("day") );
             else
                 iPlus = 30 - TextUtil.convertInteger( hmTolunar.get("day") );
