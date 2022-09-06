@@ -14,6 +14,17 @@ public class TextUtil {
 
         return sRtnVal;
     }
+        public static int convertInteger(Object oVar) throws Exception {
+        String sValidationVal = null;
+        int iRtnVal = 0;
+
+        if (oVar != null) {
+            sValidationVal = String.valueOf(oVar);
+            iRtnVal = StringUtils.isNotEmpty(sValidationVal) ? Integer.valueOf((String) sValidationVal) : 0;
+        }
+
+        return iRtnVal;
+    }
 
     public static boolean isNullOrEmpty(String s) {
         return s == null || s.trim().length() == 0 || "null".equalsIgnoreCase(s.trim());

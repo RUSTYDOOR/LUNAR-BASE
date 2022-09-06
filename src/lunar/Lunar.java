@@ -404,7 +404,7 @@ public class Lunar extends LunarBase {
         day   = so[3];
         hour  = so[4];
 
-        hmArray.put( "date",   v                  );  // 'data' => (object) array ('y' => $year, 'm' => $month, 'd' => $day)
+        hmArray.put( "date",   iArr               );  // 'data' => (object) array ('y' => $year, 'm' => $month, 'd' => $day)
         hmArray.put( "year",   this.ganji[year]   );
         hmArray.put( "month",  this.ganji[month]  );
         hmArray.put( "day",    this.ganji[day]    );
@@ -597,6 +597,52 @@ public class Lunar extends LunarBase {
             iNo -= 60;
 
         if (mode) {
+            return this.hganji[iNo];
+        } else {
+            return this.ganji[iNo];
+        }
+    }
+
+    /**
+     * 윤년 체크
+     *
+     * 예제:
+     *
+     * @access public
+     * @return bool
+     * @param int 년도
+     * @param bool Julian 여부
+     * <p>
+     * 1582년 이전은 Julian calender로 판단하여 이 값이
+     * false라도 율리우스력으로 간주하여 판단한다. (sinse 1.0.1)
+     * </p>
+     */
+    public boolean is_leap (int iYear, boolean bJulian) {
+
+        // Julian의 윤년은 4로 나누어지면 된다.
+        if ( bJulian || iYear < 1583 )
+            return (iYear % 4) == 0 ? false : true;
+
+        if ( (iYear % 400) == 0 )
+            return true;
+
+        if ( (iYear % 4) == 0 && (iYear % 100) != 0 )
+            return true;
+
+        return false;
+    }
+
+    /**
+     * @access public
+     * @return string
+     * @param int ganji index number
+     * @param bool 출력 모드 (false => 한글, true => 한자)
+     */
+    public String ganji_ref (int iNo, boolean bMode) {
+        if ( iNo > 59 )
+            iNo -= 60;
+
+        if (bMode == true) {
             return this.hganji[iNo];
         } else {
             return this.ganji[iNo];
