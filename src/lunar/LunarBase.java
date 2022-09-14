@@ -151,7 +151,7 @@ public class LunarBase {
      * @return int
      */
     protected int div (BigDecimal bdVal1, BigDecimal bdVal2) {
-        return (bdVal1.divide(bdVal2)).intValue();
+        return (bdVal1.divide(bdVal2, 8, BigDecimal.ROUND_CEILING)).intValue();
     }
     
     
@@ -699,7 +699,7 @@ public class LunarBase {
 
         // 근점이각
         // 3.14159265358979 * (sl - smin) / 180
-        BigDecimal sminangle = NumberUtils.createBigDecimal("3.14159265358979").multiply(sl.subtract(smin)).divide(NumberUtils.createBigDecimal("180"));
+        BigDecimal sminangle = NumberUtils.createBigDecimal("3.14159265358979").multiply(sl.subtract(smin)).divide(NumberUtils.createBigDecimal("180"), 8, BigDecimal.ROUND_CEILING);
 
         // 황경차
         // 1.919 * Math.sin (sminangle) + 0.02 * Math.sin (2 * sminangle);
@@ -719,14 +719,14 @@ public class LunarBase {
 
         // 근점이각
         // 3.14159265358979 * (ml - mmin) / 180
-        BigDecimal mminangle = NumberUtils.createBigDecimal("3.14159265358979").multiply(ml.subtract(mmin)).divide(NumberUtils.createBigDecimal("180"));
+        BigDecimal mminangle = NumberUtils.createBigDecimal("3.14159265358979").multiply(ml.subtract(mmin)).divide(NumberUtils.createBigDecimal("180"), 8, BigDecimal.ROUND_CEILING);
 
         // 교점황경
         // 202.489407 - 0.05295377 * day
         BigDecimal msangle   = (day.multiply(NumberUtils.createBigDecimal("0.05295377"))).subtract(NumberUtils.createBigDecimal("202.489407"));
         
         // 3.14159265358979 * (ml - msangle) / 180;
-        BigDecimal msdangle  = NumberUtils.createBigDecimal("3.14159265358979").multiply(ml.subtract(msangle)).divide(NumberUtils.createBigDecimal("180"));
+        BigDecimal msdangle  = NumberUtils.createBigDecimal("3.14159265358979").multiply(ml.subtract(msangle)).divide(NumberUtils.createBigDecimal("180"), 8, BigDecimal.ROUND_CEILING);
         
         // 황경차
         /** double md = 5.06889 * Math.sin (mminangle)
@@ -797,7 +797,7 @@ public class LunarBase {
         BigDecimal de = dem;
 
         while ( de.compareTo(NumberUtils.createBigDecimal("13.5")) > 0 ) {
-            d.subtract(NumberUtils.createBigDecimal("1"));
+            d  = d.subtract(NumberUtils.createBigDecimal("1"));
             de = this.moonsundegree (d);
         }
 
@@ -806,9 +806,15 @@ public class LunarBase {
             de = this.moonsundegree (d);
         }
 
+        System.out.println("#Debug Here d : " + d.toString());
+        System.out.println("#Debug Here de : " + de.toString());
         while ( de.compareTo(NumberUtils.createBigDecimal("359.99")) < 0 ) {
             d  = d.subtract(NumberUtils.createBigDecimal("0.000694444"));
             de = this.moonsundegree (d);
+
+            System.out.println("==================================");
+            System.out.println("#Debug Here d : " + d.toString());
+            System.out.println("#Debug Here de : " + de.toString());
         }
 
         d = d.add(NumberUtils.createBigDecimal("0.375"));
@@ -823,7 +829,7 @@ public class LunarBase {
         de = dem;
 
         while ( de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0 ) {
-            d.add(NumberUtils.createBigDecimal("1"));
+            d  = d.add(NumberUtils.createBigDecimal("1"));
             de = this.moonsundegree (d);
         }
 
@@ -856,7 +862,7 @@ public class LunarBase {
             de = this.moonsundegree (d);
 
             while ( de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0 ) {
-                d.add(NumberUtils.createBigDecimal("1"));
+                d  = d.add(NumberUtils.createBigDecimal("1"));
                 de = this.moonsundegree (d);
             }
 
@@ -884,10 +890,10 @@ public class LunarBase {
         de = this.moonsundegree (d);
 
         while ( de.compareTo(NumberUtils.createBigDecimal("166.5")) < 0 ) {
-            d.add(NumberUtils.createBigDecimal("1"));
+            d  = d.add(NumberUtils.createBigDecimal("1"));
             de = this.moonsundegree (d);
         }
-        
+
         while ( de.compareTo(NumberUtils.createBigDecimal("179")) < 0 ) {
             d  = d.add(NumberUtils.createBigDecimal("0.04166666666"));
             de = this.moonsundegree (d);
@@ -981,21 +987,21 @@ public class LunarBase {
 
             if ((list2nd[8] == list1st[1] && list2nd[9] >= list1st[2]) || (list2nd[8] == list1st[11] && list2nd[9] < list1st[12])) {
                 // ($midname1 - 1) / 2 + 1
-                lmonth = (MathUtil.convertIntToBigDecimal(list2nd[6]).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2")).add(NumberUtils.createBigDecimal("1"));
+                lmonth = (MathUtil.convertIntToBigDecimal(list2nd[6]).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 8, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
                 lmoonyun = 0;
             } else {
                 if ((list3rd[1] == list1st[11] && list3rd[2] < list1st[12]) || (list3rd[1] == list1st[1] && list3rd[2] >= list1st[2])) {
                     // ($midname2 - 1) / 2 + 1;
-                    lmonth = (MathUtil.convertIntToBigDecimal(midname2).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2")).add(NumberUtils.createBigDecimal("1"));
+                    lmonth = (MathUtil.convertIntToBigDecimal(midname2).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 8, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
                     lmoonyun = 0;
                 } else {
                     if (list1st[1] < list3rd[1] && list3rd[1] < list1st[11]) {
                         // ($midname2 - 1) / 2 + 1;
-                        lmonth = (MathUtil.convertIntToBigDecimal(midname2).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2")).add(NumberUtils.createBigDecimal("1"));
+                        lmonth = (MathUtil.convertIntToBigDecimal(midname2).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 8, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
                         lmoonyun = 0;
                     } else {
                         // ($midname1 - 1) / 2 + 1
-                        lmonth = (MathUtil.convertIntToBigDecimal(list2nd[6]).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2")).add(NumberUtils.createBigDecimal("1"));
+                        lmonth = (MathUtil.convertIntToBigDecimal(list2nd[6]).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 8, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
                         lmoonyun = 1;
                     }
                 }

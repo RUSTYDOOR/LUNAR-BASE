@@ -30,7 +30,7 @@ public class LunarMain {
              *
              * and reference variavble $v is changed to '2013-07-13'
              */
-            String sDate = "1976-8-13";
+            String sDate = "19760813";
             int[] iArr = lunar.toargs(sDate);
 
             System.out.println("### " + sDate + "\n");
@@ -99,7 +99,7 @@ public class LunarMain {
              *            [ddi] => 뱀
              *        )
              */
-            HashMap<?, ?> hmToLunar = lunar.tolunar("1976-08-13");
+            HashMap<?, ?> hmToLunar = lunar.tolunar("19760813");
             System.out.println("largemonth : " + TextUtil.convertString(hmToLunar.get("largemonth")) );
 
 
@@ -141,13 +141,12 @@ public class LunarMain {
              * TODO: 윤달 확인 Method 제작 필요
              * 구하는 음력월의 윤달 여부를 모른다면 다음과 같이 확인
              * 과정이 필요하다.
-             */
             // $lun = '2013-06-09';
             // $solv = $lunar->tosolar ($lun);
             // $lunv = $lunar->tolunar ($sol->fmt);
             // if ( $lun != $lunv->fmt )
             //     $solv = $lunar->tosolar ($lun, true);
-
+            */
 
             /*
              * lunar.dayfortuen ($date)

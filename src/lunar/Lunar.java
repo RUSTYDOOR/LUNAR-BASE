@@ -100,7 +100,7 @@ public class Lunar extends LunarBase {
 
                 y = Integer.valueOf( DateUtil.convertTimestampToDate(lTimeStamp, "yyyy") );
                 m = Integer.valueOf( DateUtil.convertTimestampToDate(lTimeStamp, "MM") );
-                d = Integer.valueOf( DateUtil.convertTimestampToDate(lTimeStamp, "DD") );
+                d = Integer.valueOf( DateUtil.convertTimestampToDate(lTimeStamp, "dd") );
             } else {
                 if ( m > 12 || d > 31 ) {
                     throw new Exception ("Invalid Date Format");
@@ -610,8 +610,8 @@ public class Lunar extends LunarBase {
      *
      * @access public
      * @return bool
-     * @param int 년도
-     * @param bool Julian 여부
+     * @param 'int 년도'
+     * @param 'bool Julian 여부'
      * <p>
      * 1582년 이전은 Julian calender로 판단하여 이 값이
      * false라도 율리우스력으로 간주하여 판단한다. (sinse 1.0.1)
@@ -635,8 +635,8 @@ public class Lunar extends LunarBase {
     /**
      * @access public
      * @return string
-     * @param int ganji index number
-     * @param bool 출력 모드 (false => 한글, true => 한자)
+     * @param 'int ganji' index number
+     * @param 'bool 출력 모드' (false => 한글, true => 한자)
      */
     public String ganji_ref (int iNo, boolean bMode) {
         if ( iNo > 59 )

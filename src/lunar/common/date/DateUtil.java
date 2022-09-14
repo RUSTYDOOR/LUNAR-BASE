@@ -21,7 +21,7 @@ public class DateUtil {
 	 * <PRE>
 	 * Descriptions : 특정형태의 날짜를 다른 형태의 포맷으로 변경한다.
 	 * </PRE>
-	 * 
+	 *
 	 * @param sDate String 변경하고자 하는 날짜. "2005-01-17"
 	 * @param fromFormat   String sDate가 가지는 날짜 형식 "yyyy-MM-dd"
 	 * @param toFormat     변환하고자 하는 날짜 형식 "MM/dd/yyyy hh:mm:ss a"
@@ -44,7 +44,7 @@ public class DateUtil {
 	 * <PRE>
 	 * Descriptions : 문자열을 파싱하여 날짜형으로 리턴한다.
 	 * </PRE>
-	 * 
+	 *
 	 * @param sDate String
 	 * @param sFormat String
 	 * @return Date
@@ -81,7 +81,7 @@ public class DateUtil {
 
 		return sRet;
 	}
-	
+
 	// ***************************************************************************************
 	// get Current date string
 	// ***************************************************************************************
@@ -156,7 +156,7 @@ public class DateUtil {
 
 	/**
 	 * 두날짜 사이의 일수를 리턴
-	 * 
+	 *
 	 * @param fromDate yyyyMMdd 형식의 시작일
 	 * @param toDate   yyyyMMdd 형식의 종료일
 	 * @return 두날짜 사이의 일수
@@ -173,7 +173,7 @@ public class DateUtil {
 
 	/**
 	 * 시작일부터 종료일까지 사이의 날짜를 배열에 담아 리턴 ( 시작일과 종료일을 모두 포함한다 )
-	 * 
+	 *
 	 * @param fromDate yyyyMMdd 형식의 시작일
 	 * @param toDate   yyyyMMdd 형식의 종료일
 	 * @return yyyyMMdd 형식의 날짜가 담긴 배열
@@ -212,8 +212,8 @@ public class DateUtil {
 
 	/**
 	 * 현재 날짜에서 변경 요청한 날짜 더하거나 빼서 리턴
-	 * 
-	 * @param 숫자(일수) 집어넣기
+	 *
+	 * @param '숫자(일수)' 집어넣기
 	 * @return yyyyMMdd 형식의 날짜가 담긴 날짜
 	 */
 	public static String previosDate(int sub) {
@@ -234,9 +234,9 @@ public class DateUtil {
 
 	/**
 	 * 날짜에 - 를 넣는다.
-	 * 
-	 * @param yyyyMMdd    형식
-	 * @return yyyy-MM-dd 형식의 날짜가 담긴 날짜
+	 *
+	 * @param 'yyyyMMdd'    형식
+	 * @return 'yyyy-MM-dd' 형식의 날짜가 담긴 날짜
 	 */
 	public static String addDash(String dash) {
 		String dash_temp = "";
@@ -268,10 +268,10 @@ public class DateUtil {
 
 	/***
 	 * 입력한 시간이 유효한지 체크
-	 * 
+	 *
 	 * @param hh 시
-	 * @param mm 
-	 * @param ss 
+	 * @param mm
+	 * @param ss
 	 * @return boolean
 	 */
 	public static boolean checkTime(String hh, String mm, String ss) {
@@ -294,7 +294,7 @@ public class DateUtil {
 
 	/***
 	 * 현재 년도 가져오기
-	 * 
+	 *
 	 * @return String
 	 */
 	public static String nowYearGet() {
@@ -304,7 +304,7 @@ public class DateUtil {
 
 	/***
 	 * 현재 월 가져오기
-	 * 
+	 *
 	 * @return String
 	 */
 	public static String nowMonthGet() {
@@ -319,7 +319,7 @@ public class DateUtil {
 
 	/***
 	 * 현재 일 가져오기
-	 * 
+	 *
 	 * @return String
 	 */
 	public static String nowDayGet() {
@@ -334,7 +334,7 @@ public class DateUtil {
 
 	/***
 	 * 현재 시간 가져오기
-	 * 
+	 *
 	 * @return String
 	 */
 	public static String nowHourGet() {
@@ -349,7 +349,7 @@ public class DateUtil {
 
 	/***
 	 * 현재 분 가져오기
-	 * 
+	 *
 	 * @return String
 	 */
 	public static String nowMinuteGet() {
@@ -364,7 +364,7 @@ public class DateUtil {
 
 	/**
 	 * 현재 년월일시분초 값을 가져옴
-	 * 
+	 *
 	 * @return yyyyMMddHHmmss 형식의 날짜
 	 */
 	public static String nowDate() {
@@ -396,7 +396,7 @@ public class DateUtil {
 
 	/**
 	 * 현재 시간에 대한 timestamp
-	 * 
+	 *
 	 * @return long
 	 */
 	public static long mktime() {
@@ -406,12 +406,12 @@ public class DateUtil {
 
 	/**
 	 * <pre>
-	 *  
-	 * 지정된 날짜/포맷에 대한 timestampe 
-	 *  
+	 *
+	 * 지정된 날짜/포맷에 대한 timestampe
+	 *
 	 * mktime("2013-01-05", "yyyy-MM-dd");
 	 * </pre>
-	 * 
+	 *
 	 * @param value
 	 * @param dateFormat
 	 * @return
@@ -430,7 +430,23 @@ public class DateUtil {
 	public static String convertTimestampToDate(long lTime, String dateFormat) throws Exception {
 		Date d = new Date(lTime);
 
-		String sRet = getCurrentDateString(d, dateFormat);
+		String sRet = getTimestampToDateString(d, dateFormat);
+
+		return sRet;
+	}
+
+	// ***************************************************************************************
+	// get Current date string
+	// ***************************************************************************************
+	public static String getTimestampToDateString(Date date, String sFormat) {
+		String sRet = "";
+
+		try {
+			SimpleDateFormat sd = new SimpleDateFormat(sFormat, Locale.KOREA);
+			sRet = sd.format(date);
+		} catch (Exception e) {
+			// e.printStackTrace();
+		}
 
 		return sRet;
 	}
