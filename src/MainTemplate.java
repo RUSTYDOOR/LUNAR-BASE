@@ -9,23 +9,24 @@ public class MainTemplate {
 
     public static void main(String[] args) {
         int i = 1;
-        System.out.println(String.format("%02d", i));
-        System.out.println(String.format("%02d", 11));
+        BigDecimal bd1st = new BigDecimal("-166.1484501810230884281");
 
+        if (bd1st.compareTo(NumberUtils.createBigDecimal("360")) >= 0) System.out.println("360 true"); else System.out.println("360 false");
 
-        BigDecimal bd1st = new BigDecimal("100");
-        BigDecimal bd2nd = new BigDecimal("5");
+        if (bd1st.compareTo(NumberUtils.createBigDecimal("1")) < 0) System.out.println("0 true"); else System.out.println("0 false");
 
-        do {
-            if (bd1st.compareTo(NumberUtils.createBigDecimal("97")) > 0)
-                break;
+        while ( bd1st.compareTo(NumberUtils.createBigDecimal("360")) >= 0 || bd1st.compareTo(NumberUtils.createBigDecimal("0")) < 0 ) {
 
-            bd2nd = bd2nd.subtract(NumberUtils.createBigDecimal("1"));
-            bd1st = bd1st.subtract(bd2nd);
+            if ( bd1st.compareTo(NumberUtils.createBigDecimal("0")) > 0 ) {
+                // di -= 360;
+                bd1st = bd1st.subtract(NumberUtils.createBigDecimal("360"));
+            } else {
+                // di += 360;
+                bd1st = bd1st.add(NumberUtils.createBigDecimal("360"));
+            }
+        }
 
-            System.out.println("bd1st : " + bd1st);
-            System.out.println("bd2nd : " + bd2nd);
-        } while ( bd1st.compareTo(NumberUtils.createBigDecimal("97")) > 0 );
+        System.out.println("bd1st : " + bd1st);
 
 
         //

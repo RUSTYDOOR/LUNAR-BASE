@@ -355,7 +355,7 @@ public class LunarMain {
                 iPlus = 30 - TextUtil.convertInteger( hmTolunar.get("day") );
 
             HashMap<?, ?> hmMoonstatus1 = lunar.moonstatus ("20130701");                  // 음력 2013-05-23
-            HashMap<?, ?> hmMoonstatus2 = lunar.moonstatus ("201307" + (1 + iPlus));      // 음력 2013-06-01
+            HashMap<?, ?> hmMoonstatus2 = lunar.moonstatus ("201307"  + String.format("%02d", (iPlus+1)));      // 음력 2013-06-01
 
             System.out.println("lunar.moonstatus : " + hmMoonstatus1.toString());
             System.out.println("lunar.moonstatus : " + hmMoonstatus2.toString());

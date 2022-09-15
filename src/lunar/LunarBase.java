@@ -151,7 +151,7 @@ public class LunarBase {
      * @return int
      */
     protected int div (BigDecimal bdVal1, BigDecimal bdVal2) {
-        return (bdVal1.divide(bdVal2, 8, BigDecimal.ROUND_CEILING)).intValue();
+        return (bdVal1.divide(bdVal2, 0, BigDecimal.ROUND_CEILING)).intValue();
     }
     
     
@@ -665,10 +665,10 @@ public class LunarBase {
         BigDecimal i  = MathUtil.convertIntToBigDecimal( this.div(d, NumberUtils.createBigDecimal("360")) );
 
         // $di = $d - ($i * 360);
-        di = d.subtract(i).multiply(NumberUtils.createBigDecimal("360"));
+        di = d.subtract(i.multiply(NumberUtils.createBigDecimal("360")));
 
-        while ( di.intValue() >= 360 || di.intValue() < 0 ) {
-            if ( di.intValue() > 0 ) {
+        while ( di.compareTo(NumberUtils.createBigDecimal("360")) >= 0 || di.compareTo(NumberUtils.createBigDecimal("0")) < 0 ) {
+            if ( di.compareTo(NumberUtils.createBigDecimal("0")) > 0 ) {
                 // di -= 360;
                 di = di.subtract(NumberUtils.createBigDecimal("360"));
             } else {
@@ -694,12 +694,12 @@ public class LunarBase {
         BigDecimal sl        = day.multiply(NumberUtils.createBigDecimal("0.98564736")).add(NumberUtils.createBigDecimal("278.956807"));
 
         // 근일점 황경
-        // (day * 282.869498 + 0.00004708)
-        BigDecimal smin      = day.multiply(NumberUtils.createBigDecimal("282.869498")).add(NumberUtils.createBigDecimal("0.00004708"));
+        // (day * 0.00004708 + 282.869498)
+        BigDecimal smin      = day.multiply(NumberUtils.createBigDecimal("0.00004708")).add(NumberUtils.createBigDecimal("282.869498"));
 
         // 근점이각
         // 3.14159265358979 * (sl - smin) / 180
-        BigDecimal sminangle = NumberUtils.createBigDecimal("3.14159265358979").multiply(sl.subtract(smin)).divide(NumberUtils.createBigDecimal("180"), 8, BigDecimal.ROUND_CEILING);
+        BigDecimal sminangle = (NumberUtils.createBigDecimal("3.14159265358979").multiply(sl.subtract(smin))).divide(NumberUtils.createBigDecimal("180"), 8, BigDecimal.ROUND_CEILING);
 
         // 황경차
         // 1.919 * Math.sin (sminangle) + 0.02 * Math.sin (2 * sminangle);
@@ -708,11 +708,11 @@ public class LunarBase {
 
         // 진황경
         BigDecimal sreal     = this.degreelow(sl.add(sd));
-        
+
         // 평균 황경
         // 27.836584 + 13.17639648 * day
         BigDecimal ml        = (day.multiply(NumberUtils.createBigDecimal("13.17639648"))).add(NumberUtils.createBigDecimal("27.836584"));
-        
+
         // 근지점 황경
         // 280.425774 + 0.11140356 * day
         BigDecimal mmin      = (day.multiply(NumberUtils.createBigDecimal("0.11140356"))).add(NumberUtils.createBigDecimal("280.425774"));
@@ -723,11 +723,11 @@ public class LunarBase {
 
         // 교점황경
         // 202.489407 - 0.05295377 * day
-        BigDecimal msangle   = (day.multiply(NumberUtils.createBigDecimal("0.05295377"))).subtract(NumberUtils.createBigDecimal("202.489407"));
-        
+        BigDecimal msangle   = NumberUtils.createBigDecimal("202.489407").subtract(day.multiply(NumberUtils.createBigDecimal("0.05295377")));
+
         // 3.14159265358979 * (ml - msangle) / 180;
         BigDecimal msdangle  = NumberUtils.createBigDecimal("3.14159265358979").multiply(ml.subtract(msangle)).divide(NumberUtils.createBigDecimal("180"), 8, BigDecimal.ROUND_CEILING);
-        
+
         // 황경차
         /** double md = 5.06889 * Math.sin (mminangle)
                     + 0.146111 * Math.sin (2 * mminangle)
@@ -796,22 +796,28 @@ public class LunarBase {
         BigDecimal d  = MathUtil.convertIntToBigDecimal(dm);
         BigDecimal de = dem;
 
+        System.out.println("init d : " + d);
+        System.out.println("init de : " + de);
+
         do {
-            if (de.compareTo(NumberUtils.createBigDecimal("13.5")) > 0) break;
+            // if (de.compareTo(NumberUtils.createBigDecimal("13.5")) > 0) break;
 
             d  = d.subtract(NumberUtils.createBigDecimal("1"));
             de = this.moonsundegree (d);
+
+            // System.out.println("d : " + d);
+            // System.out.println("de : " + de);
         } while ( de.compareTo(NumberUtils.createBigDecimal("13.5")) > 0 );
 
         do {
-            if (de.compareTo(NumberUtils.createBigDecimal("1")) > 0) break;
+            // if (de.compareTo(NumberUtils.createBigDecimal("1")) > 0) break;
 
             d  = d.subtract(NumberUtils.createBigDecimal("0.04166666666"));
             de = this.moonsundegree (d);
         } while ( de.compareTo(NumberUtils.createBigDecimal("1")) > 0 );
 
         do {
-            if (de.compareTo(NumberUtils.createBigDecimal("359.99")) < 0) break;
+            // if (de.compareTo(NumberUtils.createBigDecimal("359.99")) < 0) break;
 
             d  = d.subtract(NumberUtils.createBigDecimal("0.000694444"));
             de = this.moonsundegree (d);
@@ -829,21 +835,21 @@ public class LunarBase {
         de = dem;
 
         do {
-            if (de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0) break;
+            // if (de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0) break;
 
             d  = d.add(NumberUtils.createBigDecimal("1"));
             de = this.moonsundegree (d);
         } while ( de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0);
 
         do {
-            if (de.compareTo(NumberUtils.createBigDecimal("359")) < 0) break;
+            // if (de.compareTo(NumberUtils.createBigDecimal("359")) < 0) break;
 
             d  = d.add(NumberUtils.createBigDecimal("0.04166666666"));
             de = this.moonsundegree (d);
         } while ( de.compareTo(NumberUtils.createBigDecimal("359")) < 0 );
 
         do {
-            if (de.compareTo(NumberUtils.createBigDecimal("0.01")) > 0) break;
+//            if (de.compareTo(NumberUtils.createBigDecimal("0.01")) > 0) break;
 
             d  = d.add(NumberUtils.createBigDecimal("0.000694444"));
             de = this.moonsundegree (d);
@@ -868,21 +874,21 @@ public class LunarBase {
             de = this.moonsundegree (d);
 
             do {
-                if (de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0) break;
+//                if (de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0) break;
 
                 d  = d.add(NumberUtils.createBigDecimal("1"));
                 de = this.moonsundegree (d);
             } while ( de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0 );
 
             do {
-                if (de.compareTo(NumberUtils.createBigDecimal("359")) < 0) break;
+//                if (de.compareTo(NumberUtils.createBigDecimal("359")) < 0) break;
 
                 d  = d.add(NumberUtils.createBigDecimal("0.04166666666"));
                 de = this.moonsundegree (d);
             } while ( de.compareTo(NumberUtils.createBigDecimal("359")) < 0 );
 
             do {
-                if (de.compareTo(NumberUtils.createBigDecimal("0.01")) > 0) break;
+//                if (de.compareTo(NumberUtils.createBigDecimal("0.01")) > 0) break;
 
                 d  = d.add(NumberUtils.createBigDecimal("0.000694444"));
                 de = this.moonsundegree (d);
@@ -902,21 +908,21 @@ public class LunarBase {
         de = this.moonsundegree (d);
 
         do {
-            if (de.compareTo(NumberUtils.createBigDecimal("166.5")) < 0) break;
+//            if (de.compareTo(NumberUtils.createBigDecimal("166.5")) < 0) break;
 
             d  = d.add(NumberUtils.createBigDecimal("1"));
             de = this.moonsundegree (d);
         } while ( de.compareTo(NumberUtils.createBigDecimal("166.5")) < 0 );
 
         do {
-            if (de.compareTo(NumberUtils.createBigDecimal("179")) < 0) break;
+//            if (de.compareTo(NumberUtils.createBigDecimal("179")) < 0) break;
 
             d  = d.add(NumberUtils.createBigDecimal("0.04166666666"));
             de = this.moonsundegree (d);
         } while ( de.compareTo(NumberUtils.createBigDecimal("179")) < 0 );
 
         do {
-            if (de.compareTo(NumberUtils.createBigDecimal("179.999")) < 0) break;
+//            if (de.compareTo(NumberUtils.createBigDecimal("179.999")) < 0) break;
 
             d  = d.add(NumberUtils.createBigDecimal("0.000694444"));
             de = this.moonsundegree (d);
