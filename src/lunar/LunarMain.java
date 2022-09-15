@@ -99,7 +99,7 @@ public class LunarMain {
              *            [ddi] => 뱀
              *        )
              */
-            HashMap<?, ?> hmToLunar = lunar.tolunar("19761007");
+            HashMap<?, ?> hmToLunar = lunar.tolunar("19761006");
             // System.out.println("lunar.tolunar : " + TextUtil.convertString(hmToLunar.get("largemonth")) );
             System.out.println("lunar.tolunar : " + hmToLunar.toString() );
 
