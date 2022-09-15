@@ -91,9 +91,9 @@ public class Lunar extends LunarBase {
             d = Integer.valueOf( DateUtil.getCurrentDay("dd") );
         } else {
             // 날짜문자열 분리부분
-            y = Integer.valueOf( DateUtil.cutDate(v, "YYYY") );
+            y = Integer.valueOf( DateUtil.cutDate(v, "yyyy") );
             m = Integer.valueOf( DateUtil.cutDate(v, "MM") );
-            d = Integer.valueOf( DateUtil.cutDate(v, "DD") );
+            d = Integer.valueOf( DateUtil.cutDate(v, "dd") );
 
             if ( y > 1969 && y < 2038 ) {
                 lTimeStamp = DateUtil.mktime(DateUtil.addDash(v), "yyyy-MM-dd");
@@ -140,7 +140,7 @@ public class Lunar extends LunarBase {
 
 
     /**
-     * YYYY-MM-DD 형식의 날자를 반환
+     * YYYY-MM-DD 형식의 날짜를 반환
      *
      * @access private
      * @return string
@@ -157,7 +157,7 @@ public class Lunar extends LunarBase {
 
 
     /**
-     * YYYY-MM-DD 형식의 날자를 반환
+     * YYYY-MM-DD 형식의 날짜를 반환
      *
      * @access private
      * @return string
@@ -196,7 +196,7 @@ public class Lunar extends LunarBase {
 
 
     /**
-     * 양력 날자를 음력으로 변환
+     * 양력 날짜를 음력으로 변환
      *
      * @access public
      *    <ul>
@@ -219,7 +219,7 @@ public class Lunar extends LunarBase {
      *        <li>hji => 12지 (한자)</li>
      *        <li>ddi => 띠</li>
      *    </ul>
-     * @param v|string 날자형식
+     * @param v|string 날짜형식
      *    <ul>
      *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
      *        <li>Ymd or Y-m-d</li>
@@ -238,7 +238,7 @@ public class Lunar extends LunarBase {
         int month;
         int day;
         int myoon;
-        int lmonth;
+        String lmonth;
         int k1;
         int k2;
 
@@ -252,7 +252,7 @@ public class Lunar extends LunarBase {
         month      = Integer.valueOf( r[1] );
         day        = Integer.valueOf( r[2] );
         myoon      = Integer.valueOf( r[3] );
-        lmonth     = Integer.valueOf( r[4] );
+        lmonth     = r[4];
 
         int w = this.getweekday (y, m, d);
 
@@ -286,7 +286,7 @@ public class Lunar extends LunarBase {
 
 
     /**
-     * 음력 날자를 양력으로 변환
+     * 음력 날짜를 양력으로 변환
      *
      * @access public
      *    <ul>
@@ -307,7 +307,7 @@ public class Lunar extends LunarBase {
      *        <li>hji => 12지 (한자)</li>
      *        <li>ddi => 띠</li>
      *    </ul>
-     * @param v|string 날자형식
+     * @param v|string 날짜형식
      *    <ul>
      *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
      *        <li>Ymd or Y-m-d</li>
@@ -371,7 +371,7 @@ public class Lunar extends LunarBase {
      * 일진 데이터를 구한다.
      *
      * @access public
-     * @param v|string 날자형식
+     * @param v|string 날짜형식
      *    <ul>
      *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
      *        <li>Ymd or Y-m-d</li>
@@ -421,7 +421,7 @@ public class Lunar extends LunarBase {
      *
      * @access public
      * @return object
-     * @param v|string 날자형식
+     * @param v|string 날짜형식
      *    <ul>
      *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
      *        <li>Ymd or Y-m-d</li>
@@ -457,7 +457,7 @@ public class Lunar extends LunarBase {
      * 절기 시간 구하기
      *
      * @access public
-     * @param v|string 날자형식
+     * @param v|string 날짜형식
      *    <ul>
      *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
      *        <li>Ymd or Y-m-d</li>
@@ -532,7 +532,7 @@ public class Lunar extends LunarBase {
      *
      * @access public
      * @return object
-     * @param v|string 날자형식
+     * @param v|string 날짜형식
      *    <ul>
      *        <li>unixstmap (1970년 12월 15일 이후부터 가능)</li>
      *        <li>Ymd or Y-m-d</li>

@@ -796,26 +796,26 @@ public class LunarBase {
         BigDecimal d  = MathUtil.convertIntToBigDecimal(dm);
         BigDecimal de = dem;
 
-        while ( de.compareTo(NumberUtils.createBigDecimal("13.5")) > 0 ) {
+        do {
+            if (de.compareTo(NumberUtils.createBigDecimal("13.5")) > 0) break;
+
             d  = d.subtract(NumberUtils.createBigDecimal("1"));
             de = this.moonsundegree (d);
-        }
+        } while ( de.compareTo(NumberUtils.createBigDecimal("13.5")) > 0 );
 
-        while ( de.compareTo(NumberUtils.createBigDecimal("1")) > 0 ) {
+        do {
+            if (de.compareTo(NumberUtils.createBigDecimal("1")) > 0) break;
+
             d  = d.subtract(NumberUtils.createBigDecimal("0.04166666666"));
             de = this.moonsundegree (d);
-        }
+        } while ( de.compareTo(NumberUtils.createBigDecimal("1")) > 0 );
 
-        System.out.println("#Debug Here d : " + d.toString());
-        System.out.println("#Debug Here de : " + de.toString());
-        while ( de.compareTo(NumberUtils.createBigDecimal("359.99")) < 0 ) {
+        do {
+            if (de.compareTo(NumberUtils.createBigDecimal("359.99")) < 0) break;
+
             d  = d.subtract(NumberUtils.createBigDecimal("0.000694444"));
             de = this.moonsundegree (d);
-
-            System.out.println("==================================");
-            System.out.println("#Debug Here d : " + d.toString());
-            System.out.println("#Debug Here de : " + de.toString());
-        }
+        } while ( de.compareTo(NumberUtils.createBigDecimal("359.99")) < 0 );
 
         d = d.add(NumberUtils.createBigDecimal("0.375"));
         d = d.multiply(NumberUtils.createBigDecimal("1440"));
@@ -828,20 +828,26 @@ public class LunarBase {
         d  = MathUtil.convertIntToBigDecimal(dm);
         de = dem;
 
-        while ( de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0 ) {
+        do {
+            if (de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0) break;
+
             d  = d.add(NumberUtils.createBigDecimal("1"));
             de = this.moonsundegree (d);
-        }
+        } while ( de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0);
 
-        while ( de.compareTo(NumberUtils.createBigDecimal("359")) < 0 ) {
+        do {
+            if (de.compareTo(NumberUtils.createBigDecimal("359")) < 0) break;
+
             d  = d.add(NumberUtils.createBigDecimal("0.04166666666"));
             de = this.moonsundegree (d);
-        }
+        } while ( de.compareTo(NumberUtils.createBigDecimal("359")) < 0 );
 
-        while ( de.compareTo(NumberUtils.createBigDecimal("0.01")) > 0 ) {
+        do {
+            if (de.compareTo(NumberUtils.createBigDecimal("0.01")) > 0) break;
+
             d  = d.add(NumberUtils.createBigDecimal("0.000694444"));
             de = this.moonsundegree (d);
-        }
+        } while ( de.compareTo(NumberUtils.createBigDecimal("0.01")) > 0 );
 
         BigDecimal pd = d;
         d = d.add(NumberUtils.createBigDecimal("0.375"));
@@ -861,20 +867,26 @@ public class LunarBase {
             d = pd.add(NumberUtils.createBigDecimal("26"));
             de = this.moonsundegree (d);
 
-            while ( de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0 ) {
+            do {
+                if (de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0) break;
+
                 d  = d.add(NumberUtils.createBigDecimal("1"));
                 de = this.moonsundegree (d);
-            }
+            } while ( de.compareTo(NumberUtils.createBigDecimal("346.5")) < 0 );
 
-            while ( de.compareTo(NumberUtils.createBigDecimal("359")) < 0 ) {
+            do {
+                if (de.compareTo(NumberUtils.createBigDecimal("359")) < 0) break;
+
                 d  = d.add(NumberUtils.createBigDecimal("0.04166666666"));
                 de = this.moonsundegree (d);
-            }
+            } while ( de.compareTo(NumberUtils.createBigDecimal("359")) < 0 );
 
-            while ( de.compareTo(NumberUtils.createBigDecimal("0.01")) > 0 ) {
+            do {
+                if (de.compareTo(NumberUtils.createBigDecimal("0.01")) > 0) break;
+
                 d  = d.add(NumberUtils.createBigDecimal("0.000694444"));
                 de = this.moonsundegree (d);
-            }
+            } while ( de.compareTo(NumberUtils.createBigDecimal("0.01")) > 0 );
 
             d = d.add(NumberUtils.createBigDecimal("0.375"));
             d = d.multiply(NumberUtils.createBigDecimal("1440"));
@@ -889,20 +901,26 @@ public class LunarBase {
 
         de = this.moonsundegree (d);
 
-        while ( de.compareTo(NumberUtils.createBigDecimal("166.5")) < 0 ) {
+        do {
+            if (de.compareTo(NumberUtils.createBigDecimal("166.5")) < 0) break;
+
             d  = d.add(NumberUtils.createBigDecimal("1"));
             de = this.moonsundegree (d);
-        }
+        } while ( de.compareTo(NumberUtils.createBigDecimal("166.5")) < 0 );
 
-        while ( de.compareTo(NumberUtils.createBigDecimal("179")) < 0 ) {
+        do {
+            if (de.compareTo(NumberUtils.createBigDecimal("179")) < 0) break;
+
             d  = d.add(NumberUtils.createBigDecimal("0.04166666666"));
             de = this.moonsundegree (d);
-        }
+        } while ( de.compareTo(NumberUtils.createBigDecimal("179")) < 0 );
 
-        while ( de.compareTo(NumberUtils.createBigDecimal("179.999")) < 0 ) {
+        do {
+            if (de.compareTo(NumberUtils.createBigDecimal("179.999")) < 0) break;
+
             d  = d.add(NumberUtils.createBigDecimal("0.000694444"));
             de = this.moonsundegree (d);
-        }
+        } while ( de.compareTo(NumberUtils.createBigDecimal("179.999")) < 0 );
 
         d = d.add(NumberUtils.createBigDecimal("0.375"));
         d = d.multiply(NumberUtils.createBigDecimal("1440"));
@@ -987,21 +1005,21 @@ public class LunarBase {
 
             if ((list2nd[8] == list1st[1] && list2nd[9] >= list1st[2]) || (list2nd[8] == list1st[11] && list2nd[9] < list1st[12])) {
                 // ($midname1 - 1) / 2 + 1
-                lmonth = (MathUtil.convertIntToBigDecimal(list2nd[6]).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 8, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
+                lmonth = (MathUtil.convertIntToBigDecimal(list2nd[6]).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 0, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
                 lmoonyun = 0;
             } else {
                 if ((list3rd[1] == list1st[11] && list3rd[2] < list1st[12]) || (list3rd[1] == list1st[1] && list3rd[2] >= list1st[2])) {
                     // ($midname2 - 1) / 2 + 1;
-                    lmonth = (MathUtil.convertIntToBigDecimal(midname2).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 8, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
+                    lmonth = (MathUtil.convertIntToBigDecimal(midname2).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 0, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
                     lmoonyun = 0;
                 } else {
                     if (list1st[1] < list3rd[1] && list3rd[1] < list1st[11]) {
                         // ($midname2 - 1) / 2 + 1;
-                        lmonth = (MathUtil.convertIntToBigDecimal(midname2).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 8, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
+                        lmonth = (MathUtil.convertIntToBigDecimal(midname2).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 0, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
                         lmoonyun = 0;
                     } else {
                         // ($midname1 - 1) / 2 + 1
-                        lmonth = (MathUtil.convertIntToBigDecimal(list2nd[6]).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 8, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
+                        lmonth = (MathUtil.convertIntToBigDecimal(list2nd[6]).subtract(NumberUtils.createBigDecimal("1"))).divide(NumberUtils.createBigDecimal("2"), 0, BigDecimal.ROUND_CEILING).add(NumberUtils.createBigDecimal("1"));
                         lmoonyun = 1;
                     }
                 }

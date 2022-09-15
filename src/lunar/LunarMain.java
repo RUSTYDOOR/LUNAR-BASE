@@ -3,6 +3,7 @@ package lunar;
 import com.sun.xml.internal.bind.v2.TODO;
 import lunar.common.text.TextUtil;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class LunarMain {
@@ -33,8 +34,7 @@ public class LunarMain {
             String sDate = "19760813";
             int[] iArr = lunar.toargs(sDate);
 
-            System.out.println("### " + sDate + "\n");
-            System.out.println("iArr : " + iArr.toString() + "\n");
+            System.out.println("iArr : " + Arrays.toString(iArr));
 
 
             /*
@@ -99,8 +99,9 @@ public class LunarMain {
              *            [ddi] => 뱀
              *        )
              */
-            HashMap<?, ?> hmToLunar = lunar.tolunar("19760813");
-            System.out.println("largemonth : " + TextUtil.convertString(hmToLunar.get("largemonth")) );
+            HashMap<?, ?> hmToLunar = lunar.tolunar("19761007");
+            // System.out.println("lunar.tolunar : " + TextUtil.convertString(hmToLunar.get("largemonth")) );
+            System.out.println("lunar.tolunar : " + hmToLunar.toString() );
 
 
             /*
@@ -134,7 +135,7 @@ public class LunarMain {
              *        )
              */
             boolean bYoon = Boolean.valueOf( TextUtil.convertString(hmToLunar.get("largemonth")) );
-            System.out.println( lunar.tosolar ("2013-06-09", bYoon));
+            System.out.println("lunar.tosolar : " + lunar.tosolar ("19760813", bYoon));
 
 
             /*
@@ -176,7 +177,7 @@ public class LunarMain {
              *            [hday] => 癸未               // 한자 일진 값
              *        )
              */
-            System.out.println("lunar.dayfortune : " + lunar.dayfortune("1976-08-13"));
+            System.out.println("lunar.dayfortune : " + lunar.dayfortune("19760813"));
 
 
             /*
@@ -186,10 +187,10 @@ public class LunarMain {
              */
             String[] arrIljin = new String[31];
             for ( int i=1; i < 31; i++ ) {
-                HashMap<?, ?> hmDayfortune = lunar.dayfortune("1976-08-" + i);
+                HashMap<?, ?> hmDayfortune = lunar.dayfortune("197608" + String.format("%02d", i));
                 arrIljin[i] = TextUtil.convertString( hmDayfortune.get("day") );
             }
-            System.out.println("(Bad Case) iljin : " + arrIljin.toString());
+            System.out.println("(Bad Case) iljin : " + Arrays.toString(arrIljin));
 
 
             /*
@@ -197,7 +198,7 @@ public class LunarMain {
              * 위의 경우는 아래와 같이 $lunar->ganji_ref method를 이용하여
              * 성능을 높일 수 있다.
              */
-            HashMap<?, ?> hmDayfortune = lunar.dayfortune("1976-08-13");
+            HashMap<?, ?> hmDayfortune = lunar.dayfortune("19760813");
             arrIljin     = new String[31];
             arrIljin[13] = TextUtil.convertString( hmDayfortune.get("day") );
             int iIndex   = ((int[])hmDayfortune.get("date"))[2];
@@ -208,7 +209,7 @@ public class LunarMain {
                     iIndex -= 60;
                 arrIljin[i] = lunar.ganji_ref(iIndex, true);
             }
-            System.out.println("(Good Case) iljin : " + arrIljin.toString());
+            System.out.println("(Good Case) iljin : " + Arrays.toString(arrIljin));
 
 
             /*
@@ -229,7 +230,7 @@ public class LunarMain {
              *            [h] => 尾
              *        )
              */
-            System.out.println("lunar.s28day : " + lunar.s28day("1976-08-13"));
+            System.out.println("lunar.s28day : " + lunar.s28day("19760813"));
 
 
             /*
@@ -298,7 +299,7 @@ public class LunarMain {
              *                )
              *        )
              */
-            System.out.println("lunar.seasondate : " + lunar.seasondate("1976-08-13"));
+            System.out.println("lunar.seasondate : " + lunar.seasondate("19760813"));
 
 
             /*
@@ -335,7 +336,7 @@ public class LunarMain {
              *           )
              *   )
              */
-            System.out.println("lunar.moonstatus : " + lunar.moonstatus("1976-08-13"));
+            System.out.println("lunar.moonstatus : " + lunar.moonstatus("19760813"));
 
 
             /*
@@ -346,15 +347,15 @@ public class LunarMain {
              */
             int iPlus;
 
-            HashMap<?, ?> hmTolunar = lunar.tolunar ("2013-07-01");
+            HashMap<?, ?> hmTolunar = lunar.tolunar ("20130701");
 
             if ( Boolean.valueOf(TextUtil.convertString(hmToLunar.get("largemonth"))) ) // 평달의 경우 마지막이 29일이고 큰달은 30일이다.
                 iPlus = 29 - TextUtil.convertInteger( hmTolunar.get("day") );
             else
                 iPlus = 30 - TextUtil.convertInteger( hmTolunar.get("day") );
 
-            HashMap<?, ?> hmMoonstatus1 = lunar.moonstatus ("2013-07-01");                  // 음력 2013-05-23
-            HashMap<?, ?> hmMoonstatus2 = lunar.moonstatus ("2013-07-" + (1 + iPlus));      // 음력 2013-06-01
+            HashMap<?, ?> hmMoonstatus1 = lunar.moonstatus ("20130701");                  // 음력 2013-05-23
+            HashMap<?, ?> hmMoonstatus2 = lunar.moonstatus ("201307" + (1 + iPlus));      // 음력 2013-06-01
 
             System.out.println("lunar.moonstatus : " + hmMoonstatus1.toString());
             System.out.println("lunar.moonstatus : " + hmMoonstatus2.toString());
