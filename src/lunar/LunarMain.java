@@ -134,6 +134,7 @@ public class LunarMain {
              *            [ddi] => 뱀
              *        )
              */
+            // TODO: Function gregorian2julian 변환 하기
             boolean bYoon = Boolean.valueOf( TextUtil.convertString(hmToLunar.get("largemonth")) );
             System.out.println("lunar.tosolar : " + lunar.tosolar ("19760813", bYoon));
 
@@ -148,6 +149,7 @@ public class LunarMain {
             // if ( $lun != $lunv->fmt )
             //     $solv = $lunar->tosolar ($lun, true);
             */
+
 
             /*
              * lunar.dayfortuen ($date)

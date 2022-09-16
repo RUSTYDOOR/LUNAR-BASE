@@ -1,5 +1,6 @@
 package lunar;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -346,22 +347,22 @@ public class Lunar extends LunarBase {
         if ( k1 < 0 ) k1 += 10;
         if ( k2 < 0 ) k2 += 12;
 
-        hmArray.put( "date", 	   this.regdate(r) 		 );
-        hmArray.put( "dangi", 	   year + 2333     		 );
-        hmArray.put( "hyear", 	   this.human_year(year) );
-        hmArray.put( "year", 	   year					 );
-        hmArray.put( "month", 	   month				 );
-        hmArray.put( "day", 	   day					 );
-        hmArray.put( "week", 	   this.week[w]			 );
-        hmArray.put( "hweek", 	   this.hweek[w]		 );
+        hmArray.put( "date",       this.regdate(r) 		 );
+        hmArray.put( "dangi",      year + 2333     		 );
+        hmArray.put( "hyear",      this.human_year(year) );
+        hmArray.put( "year",       year					 );
+        hmArray.put( "month",      month				 );
+        hmArray.put( "day",        day					 );
+        hmArray.put( "week",       this.week[w]			 );
+        hmArray.put( "hweek",      this.hweek[w]		 );
         hmArray.put( "unixstamp",  DateUtil.mktime(this.regdate(new int[] {y, m, d}), "yyyy-MM-dd") );
-        hmArray.put( "ganji", 	   LunarConstants.gan[k1] + LunarConstants.ji[k2]   );
-        hmArray.put( "hganji", 	   LunarConstants.hgan[k1] + LunarConstants.hji[k2] );
-        hmArray.put( "gan", 	   LunarConstants.gan[k1]  );
-        hmArray.put( "hgan", 	   LunarConstants.hgan[k1] );
-        hmArray.put( "ji", 		   LunarConstants.ji[k2]   );
-        hmArray.put( "hji",		   LunarConstants.hji[k2]  );
-        hmArray.put( "ddi", 	   LunarConstants.ddi[k2]  );
+        hmArray.put( "ganji",      LunarConstants.gan[k1] + LunarConstants.ji[k2]   );
+        hmArray.put( "hganji",     LunarConstants.hgan[k1] + LunarConstants.hji[k2] );
+        hmArray.put( "gan",        LunarConstants.gan[k1]  );
+        hmArray.put( "hgan",       LunarConstants.hgan[k1] );
+        hmArray.put( "ji",         LunarConstants.ji[k2]   );
+        hmArray.put( "hji",        LunarConstants.hji[k2]  );
+        hmArray.put( "ddi",        LunarConstants.ddi[k2]  );
 
         return hmArray;
     }
@@ -403,6 +404,11 @@ public class Lunar extends LunarBase {
         month = so[2];
         day   = so[3];
         hour  = so[4];
+
+        //
+        iArr[0] = year;
+        iArr[1] = month;
+        iArr[2] = day;
 
         hmArray.put( "date",   iArr               );  // 'data' => (object) array ('y' => $year, 'm' => $month, 'd' => $day)
         hmArray.put( "year",   this.ganji[year]   );

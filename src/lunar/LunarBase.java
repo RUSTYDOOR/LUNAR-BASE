@@ -152,7 +152,7 @@ public class LunarBase {
      * @return int
      */
     protected int div (BigDecimal bdVal1, BigDecimal bdVal2) {
-        return (bdVal1.divide(bdVal2, 0, BigDecimal.ROUND_CEILING)).intValue();
+        return (bdVal1.divide(bdVal2, 0, BigDecimal.ROUND_DOWN)).intValue();
     }
     
     
@@ -467,7 +467,6 @@ public class LunarBase {
         // 년주 구하기
         so24year = (so24 % 60) * -1;
         so24year += 12;
-        
         if ( so24year < 0 )
             so24year += 60;
         else if ( so24year > 59 )
@@ -481,15 +480,12 @@ public class LunarBase {
         else if ( monthmin100 >= 525949 )
             monthmin100 -= 525949;
 
-        for ( int i=0,j=0; i <= 11; i++ ) {
-            j = i * 2;
+        for ( int i=0; i <= 11; i++ ) {
+            int j = i * 2;
 
             if ( (LunarConstants.month[j] <= monthmin100) && (monthmin100 < LunarConstants.month[j+2]))
                 so24month = i;
-
-            // release variable
-            j = 0;
-        };
+        }
 
         // 월주 구하기
         int i = so24month;
