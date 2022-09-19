@@ -505,8 +505,8 @@ public class Lunar extends LunarBase {
         center.put("min",   list1st[5]);        // ingimin
 
         //
-        ccenter.put("name",  this.month_st[list1st[0]]);
-        ccenter.put("hname", this.hmonth_st[list1st[0]]);
+        ccenter.put("name",  this.month_st[list1st[6]]);
+        ccenter.put("hname", this.hmonth_st[list1st[6]]);
         ccenter.put("hyear", this.human_year(list1st[1]));
         ccenter.put("year",  list1st[7]);       // midyear1
         ccenter.put("month", list1st[8]);       // midmonth1
@@ -515,8 +515,8 @@ public class Lunar extends LunarBase {
         ccenter.put("min",   list1st[11]);      // midmin1
 
         //
-        ncenter.put("name",  this.month_st[list1st[0]]);
-        ncenter.put("hname", this.hmonth_st[list1st[0]]);
+        ncenter.put("name",  this.month_st[list1st[12]]);
+        ncenter.put("hname", this.hmonth_st[list1st[12]]);
         ncenter.put("hyear", this.human_year(list1st[1]));
         ncenter.put("year",  list1st[13]);      // outgiyear
         ncenter.put("month", list1st[14]);      // outgimonth

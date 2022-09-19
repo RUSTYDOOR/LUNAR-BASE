@@ -188,8 +188,10 @@ public class LunarMain {
              * 다음은 아주 안좋은 방법이다.
              */
             String[] arrIljin = new String[31];
-            for ( int i=1; i < 31; i++ ) {
-                HashMap<?, ?> hmDayfortune = lunar.dayfortune("197608" + String.format("%02d", i));
+            for ( int i=0; i < 31; i++ ) {
+                System.out.println(i + " : " + "197608" + String.format("%02d", i+1));
+
+                HashMap<?, ?> hmDayfortune = lunar.dayfortune("197608" + String.format("%02d", i+1));
                 arrIljin[i] = TextUtil.convertString( hmDayfortune.get("day") );
             }
             System.out.println("(Bad Case) iljin : " + Arrays.toString(arrIljin));
@@ -338,7 +340,7 @@ public class LunarMain {
              *           )
              *   )
              */
-            System.out.println("lunar.moonstatus : " + lunar.moonstatus("19760813"));
+            System.out.println("lunar.moonstatus_1 : " + lunar.moonstatus("19760813"));
 
 
             /*
@@ -359,8 +361,8 @@ public class LunarMain {
             HashMap<?, ?> hmMoonstatus1 = lunar.moonstatus ("20130701");                  // 음력 2013-05-23
             HashMap<?, ?> hmMoonstatus2 = lunar.moonstatus ("201307"  + String.format("%02d", (iPlus+1)));      // 음력 2013-06-01
 
-            System.out.println("lunar.moonstatus : " + hmMoonstatus1.toString());
-            System.out.println("lunar.moonstatus : " + hmMoonstatus2.toString());
+            System.out.println("lunar.moonstatus_2 : " + hmMoonstatus1.toString());
+            System.out.println("lunar.moonstatus_3 : " + hmMoonstatus2.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
