@@ -206,13 +206,27 @@ public class LunarMain {
             arrIljin[13] = TextUtil.convertString( hmDayfortune.get("day") );
             int iIndex   = ((int[])hmDayfortune.get("date"))[2];
 
-            for ( int i=2; i<31; i++ ) {
+            for ( int i=0; i < 31; i++ ) {
                 iIndex++;
                 if ( iIndex >= 60 )
                     iIndex -= 60;
                 arrIljin[i] = lunar.ganji_ref(iIndex, true);
             }
-            System.out.println("(Good Case) iljin : " + Arrays.toString(arrIljin));
+            System.out.println("(Good Case) iljin #Hanja : " + Arrays.toString(arrIljin));
+
+
+            hmDayfortune = lunar.dayfortune("19760813");
+            arrIljin     = new String[31];
+            arrIljin[13] = TextUtil.convertString( hmDayfortune.get("day") );
+            iIndex       = ((int[])hmDayfortune.get("date"))[2];
+
+            for ( int i=0; i < 31; i++ ) {
+                iIndex++;
+                if ( iIndex >= 60 )
+                    iIndex -= 60;
+                arrIljin[i] = lunar.ganji_ref(iIndex, false);
+            }
+            System.out.println("(Good Case) iljin #Hangul : " + Arrays.toString(arrIljin));
 
 
             /*
