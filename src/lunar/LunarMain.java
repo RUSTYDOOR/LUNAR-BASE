@@ -100,7 +100,6 @@ public class LunarMain {
              *        )
              */
             HashMap<?, ?> hmToLunar = lunar.tolunar("19761006");
-            // System.out.println("lunar.tolunar : " + TextUtil.convertString(hmToLunar.get("largemonth")) );
             System.out.println("lunar.tolunar : " + hmToLunar.toString() );
 
 
@@ -179,6 +178,8 @@ public class LunarMain {
              *            [hday] => 癸未               // 한자 일진 값
              *        )
              */
+            // 월주가 한칸 당겨짐, 한칸 밀어야함.  (확인 할 것)
+            System.out.println("lunar.dayfortune : START");
             System.out.println("lunar.dayfortune : " + lunar.dayfortune("19760813"));
 
 
@@ -189,8 +190,6 @@ public class LunarMain {
              */
             String[] arrIljin = new String[31];
             for ( int i=0; i < 31; i++ ) {
-                //- System.out.println(i + " : " + "197608" + String.format("%02d", i+1));
-
                 HashMap<?, ?> hmDayfortune = lunar.dayfortune("197608" + String.format("%02d", i+1));
                 arrIljin[i] = TextUtil.convertString( hmDayfortune.get("day") );
             }
@@ -207,27 +206,13 @@ public class LunarMain {
             arrIljin[13] = TextUtil.convertString( hmDayfortune.get("day") );
             int iIndex   = ((int[])hmDayfortune.get("date"))[2];
 
-            for ( int i=0; i < 31; i++ ) {
+            for ( int i=2; i<31; i++ ) {
                 iIndex++;
                 if ( iIndex >= 60 )
                     iIndex -= 60;
                 arrIljin[i] = lunar.ganji_ref(iIndex, true);
             }
-            System.out.println("(Good Case) iljin #Hanja : " + Arrays.toString(arrIljin));
-
-
-            hmDayfortune = lunar.dayfortune("19760813");
-            arrIljin     = new String[31];
-            arrIljin[13] = TextUtil.convertString( hmDayfortune.get("day") );
-            iIndex       = ((int[])hmDayfortune.get("date"))[2];
-
-            for ( int i=0; i < 31; i++ ) {
-                iIndex++;
-                if ( iIndex >= 60 )
-                    iIndex -= 60;
-                arrIljin[i] = lunar.ganji_ref(iIndex, false);
-            }
-            System.out.println("(Good Case) iljin #Hangul : " + Arrays.toString(arrIljin));
+            System.out.println("(Good Case) iljin : " + Arrays.toString(arrIljin));
 
 
             /*
