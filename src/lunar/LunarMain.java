@@ -1,6 +1,5 @@
 package lunar;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import lunar.common.text.TextUtil;
 
 import java.util.Arrays;
@@ -180,7 +179,9 @@ public class LunarMain {
              */
             // 월주가 한칸 당겨짐, 한칸 밀어야함.  (확인 할 것)
             System.out.println("lunar.dayfortune : START");
-            System.out.println("lunar.dayfortune : " + lunar.dayfortune("19760813"));
+            HashMap<?, ?> hmTmpDayfortune = lunar.dayfortune("19760813");
+            System.out.println("lunar.dayfortune (Date) : " + Arrays.toString( (int[]) hmTmpDayfortune.get("date") ));
+            System.out.println("lunar.dayfortune (All) : " + lunar.dayfortune("19760813"));
 
 
             /*
