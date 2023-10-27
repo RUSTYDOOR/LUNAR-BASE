@@ -126,17 +126,67 @@ public class Lunar extends LunarBase {
      * @param y 연도
      * @return string   AD/BC type의 연도
      */
-    public String human_year (int y) {
-        String t = null;
+    public String human_year(int y) {
+        String t;
 
-        if ( y < 1 ) {
+        if (y < 1) {
             y = (y * -1) + 1;
             t = "BC";
         } else {
             t = "AD";
         }
 
-        return t + " " + y;
+        return String.format("%s %d", t, y);
+    }
+
+
+    /**
+     * 해당 날자가 gregorian 범위인지 체크
+     *
+     * @param iYear     연도
+     * @param iMonth    월
+     * @param iDay      일
+     * @return  boolean
+     */
+    public boolean is_gregorian(int iYear, int iMonth, int iDay) {
+        int chk = iYear * 10000 + iMonth * 100 + iDay;
+
+        if ( chk < 15821015 )
+            return false;
+
+        return true;
+    }
+
+
+    /**
+     * YYYY-MM-DD 또는 array ((string) YYYY, (string) MM, (string) DD)
+     * 입력값을 * array ((int) $y, (int) $m, (int) $d)으로 변환
+     *
+     * @access public
+     * @return array array ((int) $y, (int) $m, (int) $d)
+     * @param date|string
+     *     - YYYY-MM-DD
+     *     - array ((string) YYYY, (string) MM, (stirng) DD)
+     *
+     * @return
+     */
+    public int[] splitDate(String date) {
+        if (date.startsWith("-")) {
+            date = date.substring(1);
+        }
+
+        String[] parts = date.split("-");
+        int[] result = new int[parts.length];
+
+        for (int i = 0; i < parts.length; i++) {
+            result[i] = Integer.parseInt(parts[i]);
+        }
+
+        if (date.startsWith("-")) {
+            result[0] *= -1;
+        }
+
+        return result;
     }
 
 
@@ -153,7 +203,16 @@ public class Lunar extends LunarBase {
         int day   = v[2];
 
         // '%d-%s%d-%s%d'
-        return (year + "-" + ((month < 10 ) ? "0" : "") + month + "-" + ((day < 10 ) ? "0" : "") + day);
+        //return (year + "-" + ((month < 10) ? "0" : "") + month + "-" + ((day < 10) ? "0" : "") + day);
+
+        return String.format(
+                "%d-%s%d-%s%d",
+                year,
+                (month < 10) ? "0" : "",
+                month,
+                (day < 10) ? "0" : "",
+                day
+        );
     }
 
 
@@ -170,7 +229,14 @@ public class Lunar extends LunarBase {
         int day   = Integer.valueOf( v[2] );
 
         // '%d-%s%d-%s%d'
-        return (year + "-" + ((month < 10 ) ? "0" : "") + month + "-" + ((day < 10 ) ? "0" : "") + day);
+        return String.format(
+                "%d-%s%d-%s%d",
+                year,
+                (month < 10) ? "0" : "",
+                month,
+                (day < 10) ? "0" : "",
+                day
+        );
     }
 
 
@@ -194,7 +260,6 @@ public class Lunar extends LunarBase {
 
         return false;
     }
-
 
     /**
      * 양력 날짜를 음력으로 변환
@@ -626,16 +691,11 @@ public class Lunar extends LunarBase {
     public boolean is_leap (int iYear, boolean bJulian) {
 
         // Julian의 윤년은 4로 나누어지면 된다.
-        if ( bJulian || iYear < 1583 )
+        if ( bJulian || iYear < 1583 ) {
             return (iYear % 4) == 0 ? false : true;
-
-        if ( (iYear % 400) == 0 )
-            return true;
-
-        if ( (iYear % 4) == 0 && (iYear % 100) != 0 )
-            return true;
-
-        return false;
+        } else {
+            return (iYear % 400 == 0) || ((iYear % 4 == 0) && (iYear % 100 != 0));
+        }
     }
 
     /**
